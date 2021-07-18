@@ -17,8 +17,10 @@ import Layout from '../../components/Layout';
 import db from '../../utils/db';
 import Product from '../../models/Product';
 import { Store } from '../../utils/Store';
+import { useRouter } from 'next/dist/client/router';
 
 const ProductPage = (props) => {
+  const router = useRouter();
   // eslint-disable-next-line no-unused-vars
   const { dispatch } = useContext(Store);
 
@@ -40,6 +42,7 @@ const ProductPage = (props) => {
     }
 
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity: 1 } });
+    router.push('/cart');
   };
 
   return (
