@@ -22,7 +22,7 @@ import { useRouter } from 'next/dist/client/router';
 const ProductPage = (props) => {
   const router = useRouter();
   // eslint-disable-next-line no-unused-vars
-  const { dispatch } = useContext(Store);
+  const { state, dispatch } = useContext(Store);
 
   const { product } = props;
   console.log(product);
@@ -34,14 +34,17 @@ const ProductPage = (props) => {
   }
 
   const addToCartHandler = async () => {
+    const existingItem = state.cart.cartItems.find(
+      (item) => item._id === product._id,
+    );
+    const quantity = existingItem ? existingItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
-
-    if (data.countInStock <= 0) {
+    if (data.countInStock < quantity) {
       window.alert('Sorry, product is out of stock');
       return;
     }
 
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity: 1 } });
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
     router.push('/cart');
   };
 

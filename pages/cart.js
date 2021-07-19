@@ -1,4 +1,6 @@
 import React, { useContext } from 'react';
+import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import Layout from '../components/Layout';
 import {
@@ -20,14 +22,32 @@ import {
 } from '@material-ui/core';
 import { Store } from '../utils/Store';
 import Image from 'next/image';
+import axios from 'axios';
 
 const CartPage = () => {
-  const { state } = useContext(Store);
+  const { state, dispatch } = useContext(Store);
   const {
     cart: { cartItems },
   } = state;
 
-  console.log(cartItems);
+  const router = useRouter();
+
+  const updateCartHandler = async (item, quantity) => {
+    const { data } = await axios.get(`/api/products/${item._id}`);
+    if (data.countInStock < quantity) {
+      window.alert('Sorry. Product is out of stock');
+      return;
+    }
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
+  };
+
+  const removeItemHandler = (item) => {
+    dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+  };
+
+  const checkoutHandler = () => {
+    router.push('/shipping');
+  };
 
   return (
     <Layout title="Shopping Cart">
@@ -37,7 +57,10 @@ const CartPage = () => {
 
       {cartItems.length === 0 ? (
         <div>
-          Cart Is Empty. <NextLink href="/">Back To Products</NextLink>
+          Cart Is Empty.{' '}
+          <NextLink href="/" passHref>
+            <Link>Back To Products</Link>
+          </NextLink>
         </div>
       ) : (
         <Grid container spacing={2}>
@@ -79,7 +102,12 @@ const CartPage = () => {
                           </NextLink>
                         </TableCell>
                         <TableCell align="right">
-                          <Select value={item.quantity}>
+                          <Select
+                            value={item.quantity}
+                            onChange={(e) =>
+                              updateCartHandler(item, e.target.value)
+                            }
+                          >
                             {[...Array(item.countInStock).keys()].map((x) => (
                               <MenuItem key={x + 1} value={x + 1}>
                                 {x + 1}
@@ -89,7 +117,11 @@ const CartPage = () => {
                         </TableCell>
                         <TableCell align="right">R{item.price}</TableCell>
                         <TableCell align="right">
-                          <Button variant="contained" color="primary">
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => removeItemHandler(item)}
+                          >
                             &times;
                           </Button>
                         </TableCell>
@@ -100,7 +132,7 @@ const CartPage = () => {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid md={3} xs={12}>
+          <Grid item md={3} xs={12}>
             <Card>
               <List>
                 <ListItem>
@@ -111,7 +143,12 @@ const CartPage = () => {
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  <Button variant="contained" fullWidth color="primary">
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    color="primary"
+                    onClick={checkoutHandler}
+                  >
                     Checkout
                   </Button>
                 </ListItem>
@@ -124,4 +161,4 @@ const CartPage = () => {
   );
 };
 
-export default CartPage;
+export default dynamic(() => Promise.resolve(CartPage), { ssr: false });
