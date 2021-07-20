@@ -78,6 +78,8 @@ export default function Layout({ title, description, children }) {
     router.push('/');
   };
 
+  console.log(userInfo);
+
   return (
     <div>
       <Head>
@@ -122,7 +124,7 @@ export default function Layout({ title, description, children }) {
                     onClick={loginClickHandler}
                     className={classes.navbarButton}
                   >
-                    {userInfo.name}
+                    {userInfo.firstName}
                   </Button>
                   <Menu
                     id="simple-menu"
