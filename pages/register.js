@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Layout from '../components/Layout';
 import useStyles from '../utils/styles';
 import axios from 'axios';
@@ -31,9 +31,11 @@ const RegisterPage = () => {
   const router = useRouter();
   const { redirect } = router.query;
 
-  if (userInfo) {
-    router.push('/');
-  }
+  useEffect(() => {
+    if (userInfo) {
+      router.push('/');
+    }
+  }, []);
 
   const classes = useStyles();
 
