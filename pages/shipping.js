@@ -1,7 +1,5 @@
-import NextLink from 'next/link';
 import {
   Button,
-  Link,
   List,
   ListItem,
   MenuItem,
@@ -17,24 +15,37 @@ import { Store } from '../utils/Store';
 import { useRouter } from 'next/dist/client/router';
 import Cookies from 'js-cookie';
 import { Controller, useForm } from 'react-hook-form';
+import CheckoutWizard from '../components/CheckoutWizard';
 
 const ShippingPage = () => {
   const { state, dispatch } = useContext(Store);
-  const { userInfo } = state;
+  const {
+    userInfo,
+    cart: { shippingAddress },
+  } = state;
 
   const {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
   } = useForm();
 
   const router = useRouter();
-  const { redirect } = router.query;
 
   useEffect(() => {
     if (!userInfo) {
       router.push('/login?redirect=/shipping');
     }
+    setValue('firstName', shippingAddress.firstName);
+    setValue('lastName', shippingAddress.lastName);
+    setValue('address', shippingAddress.address);
+    setValue('city', shippingAddress.city);
+    setValue('province', shippingAddress.province);
+    setValue('postalCode', shippingAddress.postalCode);
+    setValue('university', shippingAddress.university);
+    setValue('country', shippingAddress.country);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const classes = useStyles();
@@ -108,6 +119,7 @@ const ShippingPage = () => {
 
   return (
     <Layout title="Shipping Address">
+      <CheckoutWizard activeStep={1} />
       <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
         <Typography variant="h1" component="h1">
           Shipping Address
