@@ -24,6 +24,11 @@ const orderSchema = new mongoose.Schema(
       university: { type: String, required: true },
     },
     paymentMethod: { type: String, required: true },
+    paymentResult: {
+      id: { type: String },
+      status: { type: String },
+      email_address: { type: String },
+    },
     itemsPrice: { type: Number, required: true },
     shippingPrice: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
