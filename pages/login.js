@@ -16,6 +16,7 @@ import { useRouter } from 'next/dist/client/router';
 import Cookies from 'js-cookie';
 import { Controller, useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
+import { getError } from '../utils/error';
 
 const LoginPage = () => {
   const {
@@ -50,10 +51,7 @@ const LoginPage = () => {
       router.push(redirect || '/');
     } catch (error) {
       console.log(error.message);
-      enqueueSnackbar(
-        error.response.data ? error.response.data.message : error.message,
-        { variant: 'error' },
-      );
+      enqueueSnackbar(getError(error), { variant: 'error' });
     }
   };
 
