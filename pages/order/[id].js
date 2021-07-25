@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import Layout from '../../components/Layout';
 import {
+  Button,
   Card,
   CircularProgress,
   Grid,
@@ -43,6 +44,23 @@ function reducer(state, action) {
       return { ...state, loadingPay: false, errorPay: action.payload };
     case 'PAY_RESET':
       return { ...state, loadingPay: false, successPay: false, errorPay: '' };
+    case 'SHIPPING_REQUEST':
+      return { ...state, loadingShipping: true };
+    case 'SHIPPING_SUCCESS':
+      return { ...state, loadingShipping: false, successShipping: true };
+    case 'SHIPPING_ERROR':
+      return {
+        ...state,
+        loadingShipping: false,
+        errorShipping: action.payload,
+      };
+    case 'SHIPPING_RESET':
+      return {
+        ...state,
+        loadingShipping: false,
+        successShipping: false,
+        errorShipping: '',
+      };
     default:
       state;
   }
@@ -58,14 +76,14 @@ const OrderPage = ({ params }) => {
 
   const { userInfo } = state;
 
-  const [{ loading, error, order, successPay }, dispatch] = useReducer(
-    reducer,
-    {
-      loading: true,
-      order: {},
-      error: '',
-    },
-  );
+  const [
+    { loading, error, order, successPay, loadingShipping, successShipping },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    order: {},
+    error: '',
+  });
 
   const {
     shippingAddress,
@@ -98,10 +116,18 @@ const OrderPage = ({ params }) => {
       }
     };
 
-    if (!order._id || successPay || (order._id && order._id !== orderId)) {
+    if (
+      !order._id ||
+      successPay ||
+      successShipping ||
+      (order._id && order._id !== orderId)
+    ) {
       fetchOrder();
       if (successPay) {
         dispatch({ type: 'PAY_RESET' });
+      }
+      if (successShipping) {
+        dispatch({ type: 'SHIPPING_RESET' });
       }
     } else {
       // Load paypal script
@@ -124,13 +150,13 @@ const OrderPage = ({ params }) => {
       loadPaypalScript();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order, successPay]);
+  }, [order, successPay, successShipping]);
 
   // eslint-disable-next-line no-unused-vars
   const { closeSnackbar, enqueueSnackbar } = useSnackbar();
 
   const onApprove = (data, actions) => {
-    return actions.order.capture().then(async function (details) {
+    return actions.order.capture().then(async function(details) {
       try {
         dispatch({ type: 'PAY_REQUEST' });
         const { data } = await axios.put(
@@ -167,6 +193,26 @@ const OrderPage = ({ params }) => {
 
   function onError(err) {
     enqueueSnackbar(getError(err), { variant: 'error' });
+  }
+
+  async function shipOrderHandler() {
+    try {
+      dispatch({ type: 'SHIPPING_REQUEST' });
+      const { data } = await axios.put(
+        `/api/orders/${order._id}/ship`,
+        {},
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        },
+      );
+      dispatch({ type: 'SHIPPING_SUCCESS', payload: data });
+      enqueueSnackbar('Order has been shipped', { variant: 'success' });
+    } catch (error) {
+      dispatch({ type: 'SHIPPING_ERROR', payload: getError(error) });
+      enqueueSnackbar(getError(error), { variant: 'error' });
+    }
   }
 
   return (
@@ -330,6 +376,19 @@ const OrderPage = ({ params }) => {
                         onError={onError}
                       />
                     )}
+                  </ListItem>
+                )}
+                {userInfo.isAdmin && order.isPaid && !order.isShipped && (
+                  <ListItem>
+                    {loadingShipping && <CircularProgress />}
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      color="secondary"
+                      onClick={shipOrderHandler}
+                    >
+                      Ship Order
+                    </Button>
                   </ListItem>
                 )}
               </List>

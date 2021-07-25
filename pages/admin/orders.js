@@ -1,28 +1,28 @@
-import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
-import React, { useContext, useEffect, useReducer } from 'react';
-import NextLink from 'next/link';
-import { Store } from '../utils/Store';
 import axios from 'axios';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import NextLink from 'next/link';
+import React, { useEffect, useContext, useReducer } from 'react';
 import {
-  Button,
-  Card,
   CircularProgress,
   Grid,
   List,
   ListItem,
+  Typography,
+  Card,
+  Button,
   ListItemText,
-  Table,
-  TableBody,
-  TableCell,
   TableContainer,
+  Table,
   TableHead,
   TableRow,
-  Typography,
+  TableCell,
+  TableBody,
 } from '@material-ui/core';
-import useStyles from '../utils/styles';
-import { getError } from '../utils/error';
-import Layout from '../components/Layout';
+import { getError } from '../../utils/error';
+import { Store } from '../../utils/Store';
+import Layout from '../../components/Layout';
+import useStyles from '../../utils/styles';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -30,22 +30,21 @@ function reducer(state, action) {
       return { ...state, loading: true, error: '' };
     case 'FETCH_SUCCESS':
       return { ...state, loading: false, orders: action.payload, error: '' };
-    case 'FETCH_ERROR':
+    case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
-
     default:
       state;
   }
 }
 
-const OrderHistory = () => {
+function AdminDashboard() {
   const { state } = useContext(Store);
   const router = useRouter();
   const classes = useStyles();
   const { userInfo } = state;
 
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
-    loading,
+    loading: true,
     orders: [],
     error: '',
   });
@@ -54,41 +53,39 @@ const OrderHistory = () => {
     if (!userInfo) {
       router.push('/login');
     }
-
-    const fetchOrders = async () => {
+    const fetchData = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
-        const { data } = await axios.get(`/api/orders/history`, {
-          headers: {
-            authorization: `Bearer ${userInfo.token}`,
-          },
+        const { data } = await axios.get(`/api/admin/orders`, {
+          headers: { authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {
-        dispatch({ type: 'FETCH_ERROR', payload: getError(error) });
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
-    fetchOrders();
+    fetchData();
   }, []);
 
   return (
-    <Layout title={`Order History`}>
+    <Layout title="Orders">
       <Grid container spacing={1}>
         <Grid item md={3} xs={12}>
           <Card className={classes.section}>
             <List>
-              <NextLink href="/profile" passHref>
+              <NextLink href="/admin/dashboard" passHref>
                 <ListItem button component="a">
-                  <ListItemText caption="User Profile">
-                    User Profile
-                  </ListItemText>
+                  <ListItemText primary="Admin Dashboard"></ListItemText>
                 </ListItem>
               </NextLink>
-              <NextLink href="/order-history" passHref>
+              <NextLink href="/admin/orders" passHref>
                 <ListItem selected button component="a">
-                  <ListItemText caption="Order History">
-                    Order History
-                  </ListItemText>
+                  <ListItemText primary="Orders"></ListItemText>
+                </ListItem>
+              </NextLink>
+              <NextLink href="/admin/products" passHref>
+                <ListItem button component="a">
+                  <ListItemText primary="Products"></ListItemText>
                 </ListItem>
               </NextLink>
             </List>
@@ -99,9 +96,10 @@ const OrderHistory = () => {
             <List>
               <ListItem>
                 <Typography component="h1" variant="h1">
-                  Order History
+                  Orders
                 </Typography>
               </ListItem>
+
               <ListItem>
                 {loading ? (
                   <CircularProgress />
@@ -113,10 +111,12 @@ const OrderHistory = () => {
                       <TableHead>
                         <TableRow>
                           <TableCell>ID</TableCell>
+                          <TableCell>NAME</TableCell>
+                          <TableCell>SURNAME</TableCell>
                           <TableCell>DATE</TableCell>
                           <TableCell>TOTAL</TableCell>
                           <TableCell>PAID</TableCell>
-                          <TableCell>SHIPPED</TableCell>
+                          <TableCell>DELIVERED</TableCell>
                           <TableCell>ACTION</TableCell>
                         </TableRow>
                       </TableHead>
@@ -124,17 +124,33 @@ const OrderHistory = () => {
                         {orders.map((order) => (
                           <TableRow key={order._id}>
                             <TableCell>{order._id.substring(20, 24)}</TableCell>
-                            <TableCell>{order.createdAt}</TableCell>
+                            <TableCell>
+                              {order.shippingAddress
+                                ? order.shippingAddress.firstName
+                                : 'DELETED USER'}
+                            </TableCell>
+                            <TableCell>
+                              {order.shippingAddress
+                                ? order.shippingAddress.lastName
+                                : 'DELETED USER'}
+                            </TableCell>
+
+                            <TableCell>
+                              {order.createdAt.substring(0, 10)}
+                            </TableCell>
                             <TableCell>R{order.totalPrice}</TableCell>
                             <TableCell>
                               {order.isPaid
-                                ? `paid on ${order.paidAt.substring(0, 10)}`
+                                ? `paid at ${order.paidAt.substring(0, 10)}`
                                 : 'not paid'}
                             </TableCell>
                             <TableCell>
                               {order.isShipped
-                                ? `shipped on ${order.shippedAt}`
-                                : 'not shipped'}
+                                ? `Order shipped on ${order.shippedAt.substring(
+                                    0,
+                                    10,
+                                  )}`
+                                : 'Not shipped'}
                             </TableCell>
                             <TableCell>
                               <NextLink href={`/order/${order._id}`} passHref>
@@ -154,6 +170,6 @@ const OrderHistory = () => {
       </Grid>
     </Layout>
   );
-};
+}
 
-export default dynamic(() => Promise.resolve(OrderHistory), { ssr: false });
+export default dynamic(() => Promise.resolve(AdminDashboard), { ssr: false });
