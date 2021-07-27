@@ -36,6 +36,12 @@ function reducer(state, action) {
       return { ...state, loadingUpdate: false, errorUpdate: '' };
     case 'UPDATE_FAIL':
       return { ...state, loadingUpdate: false, errorUpdate: action.payload };
+    case 'UPLOAD_REQUEST':
+      return { ...state, loadingUpload: true, errorUpload: '' };
+    case 'UPLOAD_SUCCESS':
+      return { ...state, loadingUpload: false, errorUpload: '' };
+    case 'UPLOAD_FAIL':
+      return { ...state, loadingUpload: false, errorUpload: action.payload };
     default:
       return state;
   }
@@ -44,7 +50,10 @@ function reducer(state, action) {
 const ProductEdit = ({ params }) => {
   const productId = params.id;
   const { state } = useContext(Store);
-  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
+  const [
+    { loading, error, loadingUpdate, loadingUpload },
+    dispatch,
+  ] = useReducer(reducer, {
     loading: true,
 
     error: '',
@@ -90,6 +99,32 @@ const ProductEdit = ({ params }) => {
       fetchData();
     }
   }, []);
+
+  const uploadHandler = async (e) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append('file', file);
+    try {
+      dispatch({ type: 'UPLOAD_REQUEST' });
+
+      const { data } = await axios.post('/api/admin/upload', bodyFormData, {
+        headers: {
+          'Content-Type': 'muiltipart/form-data',
+          authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+
+      dispatch({ type: 'UPLOAD_SUCCESS' });
+
+      setValue('image', data.secure_url);
+
+      enqueueSnackbar('File uploaded successfully', { variant: 'success' });
+    } catch (error) {
+      dispatch({ type: 'UPLOAD_FAIL', payload: getError(error) });
+
+      enqueueSnackbar(getError(error), { variant: 'error' });
+    }
+  };
 
   const submitHandler = async ({
     name,
@@ -155,7 +190,12 @@ const ProductEdit = ({ params }) => {
               </NextLink>
               <NextLink href="/admin/products" passHref>
                 <ListItem selected button component="a">
-                  <ListItemText primary="Products"></ListItemText>
+                  <ListItemText caption="Products">Products</ListItemText>
+                </ListItem>
+              </NextLink>
+              <NextLink href="/admin/users" passHref>
+                <ListItem button component="a">
+                  <ListItemText caption="Users">Users</ListItemText>
                 </ListItem>
               </NextLink>
             </List>
@@ -269,6 +309,21 @@ const ProductEdit = ({ params }) => {
                           ></TextField>
                         )}
                       ></Controller>
+                    </ListItem>
+                    <ListItem>
+                      <Button
+                        disabled={loadingUpload}
+                        variant="contained"
+                        component="label"
+                      >
+                        Upload File
+                        <input
+                          type="file"
+                          onChange={uploadHandler}
+                          hidden
+                        ></input>
+                      </Button>
+                      {loadingUpload && <CircularProgress />}
                     </ListItem>
                     <ListItem>
                       <Controller
