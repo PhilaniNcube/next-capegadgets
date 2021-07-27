@@ -83,6 +83,7 @@ const Profile = () => {
     setValue('firstName', userInfo.firstName);
     setValue('lastName', userInfo.lastName);
     setValue('email', userInfo.email);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
