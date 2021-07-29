@@ -68,11 +68,6 @@ const PaymentPage = () => {
                 onChange={(e) => setPaymentMethod(e.target.value)}
               >
                 <FormControlLabel
-                  label="Paypal"
-                  value="Paypal"
-                  control={<Radio />}
-                ></FormControlLabel>
-                <FormControlLabel
                   label="Intellimali"
                   value="Intellimali"
                   control={<Radio />}

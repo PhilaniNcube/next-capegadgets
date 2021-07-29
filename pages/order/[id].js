@@ -98,6 +98,40 @@ const OrderPage = ({ params }) => {
     paidAt,
   } = order;
 
+  const submitHandler = async () => {
+    // e.preventDefault();
+    try {
+      const tokenRequest = await axios.post(
+        `https://test.intellimali.co.za/web/payment`,
+        {
+          cardNumber: '6374374100353717',
+          terminalId: '94DVA001',
+          username: 'capegadgets',
+          password: '9d059e3fb4efe73760d5ecee6909c2d2',
+          amount: totalPrice.toFixed(2),
+          redirectSuccess: `${process.env.REDIRECT_URL}/order/${order._id}?CALLBACK_RESPONSE=intelliSuccess`,
+          redirectCancel: `${process.env.REDIRECT_URL}/order/${order._id}?CALLBACK_RESPONSE=intelliFail`,
+          reference: order._id,
+        },
+
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      const tokenResponse = await tokenRequest.data.token;
+      console.log(tokenResponse);
+      localStorage.setItem('tokenResponse', `${tokenResponse}`);
+
+      window.location.href = `https://test.intellimali.co.za/web/payment?paymentToken=${tokenResponse}`;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (!userInfo) {
       return router.push('/login');
@@ -365,17 +399,16 @@ const OrderPage = ({ params }) => {
                     </Grid>
                   </Grid>
                 </ListItem>
-                {!isPaid && (
+                {!isPaid && paymentMethod === 'Intellimali' && (
                   <ListItem>
-                    {isPending ? (
-                      <CircularProgress />
-                    ) : (
-                      <PayPalButtons
-                        createOrder={createOrder}
-                        onApprove={onApprove}
-                        onError={onError}
-                      />
-                    )}
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      color="primary"
+                      onClick={() => submitHandler()}
+                    >
+                      Pay With Intellimal
+                    </Button>
                   </ListItem>
                 )}
                 {userInfo.isAdmin && order.isPaid && !order.isShipped && (
