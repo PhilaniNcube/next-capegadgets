@@ -26,6 +26,7 @@ import useStyles from '../../utils/styles';
 import { useSnackbar } from 'notistack';
 import { getError } from '../../utils/error';
 
+// eslint-disable-next-line no-unused-vars
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 
 function reducer(state, action) {
@@ -68,6 +69,7 @@ function reducer(state, action) {
 
 const OrderPage = ({ params }) => {
   const orderId = params.id;
+  // eslint-disable-next-line no-unused-vars
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const classes = useStyles();
@@ -189,6 +191,7 @@ const OrderPage = ({ params }) => {
   // eslint-disable-next-line no-unused-vars
   const { closeSnackbar, enqueueSnackbar } = useSnackbar();
 
+  // eslint-disable-next-line no-unused-vars
   const onApprove = (data, actions) => {
     return actions.order.capture().then(async function(details) {
       try {
@@ -211,6 +214,7 @@ const OrderPage = ({ params }) => {
     });
   };
 
+  // eslint-disable-next-line no-unused-vars
   function createOrder(data, actions) {
     return actions.order
       .create({
@@ -225,6 +229,7 @@ const OrderPage = ({ params }) => {
       });
   }
 
+  // eslint-disable-next-line no-unused-vars
   function onError(err) {
     enqueueSnackbar(getError(err), { variant: 'error' });
   }
