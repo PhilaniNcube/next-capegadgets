@@ -104,7 +104,7 @@ const OrderPage = ({ params }) => {
     // e.preventDefault();
     try {
       const tokenRequest = await axios.post(
-        `https://test.intellimali.co.za/web/payment`,
+        `https://corsanywhere.herokuapp.com/http://105.28.120.78/web/payment`,
         {
           cardNumber: '6374374100353717',
           terminalId: '94DVA001',
@@ -118,8 +118,6 @@ const OrderPage = ({ params }) => {
 
         {
           headers: {
-            'Access-Control-Allow-Origin': 'http://localhost:3000',
-            'Access-Control-Allow-Credentials': 'true',
             'Content-Type': 'application/json',
           },
         },
@@ -129,7 +127,7 @@ const OrderPage = ({ params }) => {
       console.log(tokenResponse);
       localStorage.setItem('tokenResponse', `${tokenResponse}`);
 
-      window.location.href = `https://test.intellimali.co.za/web/payment?paymentToken=${tokenResponse}`;
+      window.location.href = `https://corsanywhere.herokuapp.com/http://105.28.120.78/web/payment?paymentToken=${tokenResponse}`;
     } catch (error) {
       console.log(error);
     }
