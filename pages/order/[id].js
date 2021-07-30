@@ -25,8 +25,6 @@ import axios from 'axios';
 import useStyles from '../../utils/styles';
 import { useSnackbar } from 'notistack';
 import { getError } from '../../utils/error';
-
-// eslint-disable-next-line no-unused-vars
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 
 function reducer(state, action) {
@@ -69,23 +67,40 @@ function reducer(state, action) {
 
 const OrderPage = ({ params }) => {
   const orderId = params.id;
-  // eslint-disable-next-line no-unused-vars
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-
   const classes = useStyles();
   const router = useRouter();
+  console.log(router.query.payment);
   const { state } = useContext(Store);
-
   const { userInfo } = state;
-
   const [
     { loading, error, order, successPay, loadingShipping, successShipping },
     dispatch,
-  ] = useReducer(reducer, {
-    loading: true,
-    order: {},
-    error: '',
-  });
+  ] = useReducer(reducer, { loading: true, order: {}, error: '' });
+
+  useEffect(() => {
+    if (router.query.payment === 'success') {
+      const paymentResponse = async () => {
+        const token = localStorage.setItem('intelliToken');
+        const paymentRes = await axios.post(
+          `https://test.intellimali.co.za/web/payment`,
+          {
+            username: 'capegadgets',
+            password: '9d059e3fb4efe73760d5ecee6909c2d2',
+            cardNumber: '6374374100353717',
+            terminalId: '94DVA001',
+            amount: order.totalPrice,
+            redirectSuccess: `${process.env.REDIRECT_URL}/order/${order._id}?payment=success`,
+            redirectCancel: `${process.env.REDIRECT_URL}/order/${order._id}?payment=cancel`,
+            reference: order._id,
+            token: token,
+          },
+        );
+        console.log(paymentRes);
+      };
+      paymentResponse();
+    }
+  }, [order._id, order.totalPrice, router.query.payment]);
 
   const {
     shippingAddress,
@@ -100,43 +115,11 @@ const OrderPage = ({ params }) => {
     paidAt,
   } = order;
 
-  const submitHandler = async () => {
-    // e.preventDefault();
-    try {
-      const tokenRequest = await axios.post(
-        `https://corsanywhere.herokuapp.com/http://105.28.120.78/web/payment`,
-        {
-          cardNumber: '6374374100353717',
-          terminalId: '94DVA001',
-          username: 'capegadgets',
-          password: '9d059e3fb4efe73760d5ecee6909c2d2',
-          amount: totalPrice.toFixed(2),
-          redirectSuccess: `${process.env.REDIRECT_URL}/order/${order._id}?CALLBACK_RESPONSE=intelliSuccess`,
-          redirectCancel: `${process.env.REDIRECT_URL}/order/${order._id}?CALLBACK_RESPONSE=intelliFail`,
-          reference: order._id,
-        },
-
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-
-      const tokenResponse = await tokenRequest.data.token;
-      console.log(tokenResponse);
-      localStorage.setItem('tokenResponse', `${tokenResponse}`);
-
-      window.location.href = `https://corsanywhere.herokuapp.com/http://105.28.120.78/web/payment?paymentToken=${tokenResponse}`;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     if (!userInfo) {
       return router.push('/login');
     }
+
     const fetchOrder = async () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
@@ -161,6 +144,7 @@ const OrderPage = ({ params }) => {
       if (successPay) {
         dispatch({ type: 'PAY_RESET' });
       }
+
       if (successShipping) {
         dispatch({ type: 'SHIPPING_RESET' });
       }
@@ -184,13 +168,48 @@ const OrderPage = ({ params }) => {
       };
       loadPaypalScript();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order, successPay, successShipping]);
+  }, [
+    error,
+    order,
+    orderId,
+    paypalDispatch,
+    router,
+    successPay,
+    successShipping,
+    userInfo,
+  ]);
 
+  console.log(userInfo.token);
+  console.log(order);
+  const tokenRequest = async () => {
+    if (order._id) {
+      const response = await axios.get(
+        `/api/orders/${order._id}/token`,
+        {
+          username: 'capegadgets',
+          password: '9d059e3fb4efe73760d5ecee6909c2d2',
+          cardNumber: '6374374100353717',
+          terminalId: '94DVA001',
+          amount: order.totalPrice,
+          redirectSuccess: `http://localhost:3000/order/${order._id}?payment=success`,
+          redirectCancel: `http://localhost:3000/order/${order._id}?payment=cancel`,
+          reference: 'testexample',
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
+          },
+        },
+      );
+
+      console.log(response);
+      localStorage.setItem('intelliToken', response.data.token);
+
+      window.location.href = `https://test.intellimali.co.za/web/payment?paymentToken=${response.data.token}`;
+    }
+  };
   // eslint-disable-next-line no-unused-vars
   const { closeSnackbar, enqueueSnackbar } = useSnackbar();
-
-  // eslint-disable-next-line no-unused-vars
   const onApprove = (data, actions) => {
     return actions.order.capture().then(async function(details) {
       try {
@@ -213,22 +232,13 @@ const OrderPage = ({ params }) => {
     });
   };
 
-  // eslint-disable-next-line no-unused-vars
   function createOrder(data, actions) {
     return actions.order
-      .create({
-        purchase_units: [
-          {
-            amount: { value: totalPrice },
-          },
-        ],
-      })
+      .create({ purchase_units: [{ amount: { value: totalPrice } }] })
       .then((orderID) => {
         return orderID;
       });
   }
-
-  // eslint-disable-next-line no-unused-vars
   function onError(err) {
     enqueueSnackbar(getError(err), { variant: 'error' });
   }
@@ -245,6 +255,7 @@ const OrderPage = ({ params }) => {
           },
         },
       );
+
       dispatch({ type: 'SHIPPING_SUCCESS', payload: data });
       enqueueSnackbar('Order has been shipped', { variant: 'success' });
     } catch (error) {
@@ -256,9 +267,9 @@ const OrderPage = ({ params }) => {
   return (
     <Layout title={`Order ${orderId}`}>
       <Typography component="h1" variant="h1">
-        Order {orderId}
+        {' '}
+        Order {orderId}{' '}
       </Typography>
-
       {loading ? (
         <CircularProgress />
       ) : error ? (
@@ -270,14 +281,16 @@ const OrderPage = ({ params }) => {
               <List>
                 <ListItem>
                   <Typography variant="h2" component="h2">
-                    Shipping Address
+                    {' '}
+                    Shipping Address{' '}
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  {shippingAddress.firstName} {shippingAddress.lastName},{' '}
-                  {shippingAddress.address}, {shippingAddress.city},{' '}
-                  {shippingAddress.province}, {shippingAddress.country},{' '}
-                  {shippingAddress.postalCode}, {shippingAddress.university}
+                  {shippingAddress.firstName}
+                  {shippingAddress.lastName}, {shippingAddress.address},
+                  {shippingAddress.city}, {shippingAddress.province},
+                  {shippingAddress.country}, {shippingAddress.postalCode},
+                  {shippingAddress.university}
                 </ListItem>
                 <ListItem>
                   Status:{' '}
@@ -289,7 +302,8 @@ const OrderPage = ({ params }) => {
               <List>
                 <ListItem>
                   <Typography variant="h2" component="h2">
-                    Payment Method
+                    {' '}
+                    Payment Method{' '}
                   </Typography>
                 </ListItem>
                 <ListItem>{paymentMethod}</ListItem>
@@ -302,7 +316,8 @@ const OrderPage = ({ params }) => {
               <List>
                 <ListItem>
                   <Typography component="h2" variant="h2">
-                    Order Items
+                    {' '}
+                    Order Items{' '}
                   </Typography>
                 </ListItem>
                 <ListItem>
@@ -342,7 +357,8 @@ const OrderPage = ({ params }) => {
                                 >
                                   <Link>
                                     <Typography color="secondary">
-                                      {item.name}
+                                      {' '}
+                                      {item.name}{' '}
                                     </Typography>
                                   </Link>
                                 </NextLink>
@@ -393,11 +409,13 @@ const OrderPage = ({ params }) => {
                   <Grid container>
                     <Grid item xs={6}>
                       <Typography>
-                        <strong>Total:</strong>
+                        {' '}
+                        <strong>Total:</strong>{' '}
                       </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography align="right">
+                        {' '}
                         <strong>R{totalPrice}</strong>
                       </Typography>
                     </Grid>
@@ -407,11 +425,12 @@ const OrderPage = ({ params }) => {
                   <ListItem>
                     <Button
                       variant="contained"
-                      fullWidth
                       color="primary"
-                      onClick={() => submitHandler()}
+                      fullWidth
+                      onClick={() => tokenRequest()}
                     >
-                      Pay With Intellimal
+                      {' '}
+                      Pay With Intellimali{' '}
                     </Button>
                   </ListItem>
                 )}
@@ -424,7 +443,8 @@ const OrderPage = ({ params }) => {
                       color="secondary"
                       onClick={shipOrderHandler}
                     >
-                      Ship Order
+                      {' '}
+                      Ship Order{' '}
                     </Button>
                   </ListItem>
                 )}

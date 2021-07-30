@@ -9,6 +9,7 @@ handler.use(isAuth);
 handler.put(async (req, res) => {
   await db.connect();
   const order = await Order.findById(req.query.id);
+
   if (order) {
     order.isPaid = true;
     order.paidAt = Date.now();
