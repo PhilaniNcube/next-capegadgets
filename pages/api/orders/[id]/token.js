@@ -22,8 +22,8 @@ handler.get(async (req, res) => {
         cardNumber: '6374374100353717',
         terminalId: '94DVA001',
         amount: order.totalPrice,
-        redirectSuccess: `${process.env.URL}/order/${order._id}?payment=success`,
-        redirectCancel: `${process.env.URL}/order/${order._id}?payment=cancel`,
+        redirectSuccess: `${process.env.REDIRECT_URL}/order/${order._id}?payment=success`,
+        redirectCancel: `${process.env.REDIRECT_URL}/order/${order._id}?payment=cancel`,
         reference: order._id,
       },
       {
