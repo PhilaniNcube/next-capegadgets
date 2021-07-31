@@ -2,10 +2,11 @@ import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles({
   navbar: {
-    backgroundColor: '#2C2E43',
+    backgroundColor: '#efefef',
     '& a': {
-      color: '#ffffff',
+      color: '#208080',
       marginLeft: 10,
+      fontWeight: 'bold',
     },
   },
   toolbar: {
@@ -13,9 +14,9 @@ const useStyles = makeStyles({
     margin: '0',
   },
   brand: {
-    fontWeight: 'bold',
-    fontSize: '1.8rem',
-    padding: '0',
+    height: '100%',
+    objectFit: 'cover',
+    padding: '3px',
   },
   grow: {
     flexGrow: 1,
@@ -42,7 +43,7 @@ const useStyles = makeStyles({
   },
 
   navbarButton: {
-    color: '#ffffff',
+    color: '#208080',
     textTransform: 'initial',
   },
   transparentBackground: {

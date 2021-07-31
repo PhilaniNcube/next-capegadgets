@@ -79,13 +79,20 @@ const CartPage = () => {
                 <TableBody>
                   {cartItems.map((item) => {
                     return (
-                      <TableRow key={item._id}>
+                      <TableRow key={item._id || item.vbid}>
                         <TableCell>
-                          <NextLink href={`/product/${item.slug}`} passHref>
+                          <NextLink
+                            href={
+                              `/product/${item.slug}` || `/ebooks/${item.vbid}`
+                            }
+                            passHref
+                          >
                             <Link>
                               <Image
-                                src={item.image}
-                                alt={item.name}
+                                src={
+                                  item.image || item.resource_links.cover_image
+                                }
+                                alt={item.name || item.title}
                                 width={50}
                                 height={50}
                               />
@@ -93,10 +100,15 @@ const CartPage = () => {
                           </NextLink>
                         </TableCell>
                         <TableCell>
-                          <NextLink href={`/product/${item.slug}`} passHref>
+                          <NextLink
+                            href={
+                              `/product/${item.slug}` || `/ebooks/${item.vbid}`
+                            }
+                            passHref
+                          >
                             <Link>
                               <Typography color="secondary">
-                                {item.name}
+                                {item.name || item.title}
                               </Typography>
                             </Link>
                           </NextLink>

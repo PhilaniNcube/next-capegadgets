@@ -3,6 +3,7 @@ import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import Cookies from 'js-cookie';
 import NextLink from 'next/link';
+import Image from 'next/image';
 import {
   AppBar,
   Toolbar,
@@ -94,7 +95,7 @@ export default function Layout({ title, description, children }) {
           <Toolbar>
             <NextLink href="/" passHref>
               <Link>
-                <Typography className={classes.brand}>Cape Gadgets</Typography>
+                <Image src="/images/logo.png" width={145} height={60} />
               </Link>
             </NextLink>
             <div className={classes.grow}></div>
@@ -103,11 +104,18 @@ export default function Layout({ title, description, children }) {
                 checked={darkMode}
                 onChange={darkModeChangeHandler}
               ></Switch>
+              <NextLink href="/" passHref>
+                <Link>Home</Link>
+              </NextLink>
+              <NextLink href="/ebooks" passHref>
+                <Link>Ebooks</Link>
+              </NextLink>
               <NextLink href="/cart" passHref>
                 <Link>
                   {cart.cartItems.length > 0 ? (
                     <Badge
                       color="secondary"
+                      size="large"
                       badgeContent={cart.cartItems.length}
                     >
                       Cart
