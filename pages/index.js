@@ -1,23 +1,14 @@
 import { useContext } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Grid,
-  Typography,
-} from '@material-ui/core';
-import NextLink from 'next/link';
+import { Grid, Typography } from '@material-ui/core';
 
 import db from '../utils/db';
 import Product from '../models/Product';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
-import Rating from '@material-ui/lab/Rating';
+
+import ProductItem from '../components/ProductItem';
 
 export default function Home(props) {
   const { products } = props;
@@ -46,35 +37,10 @@ export default function Home(props) {
         {products.map((product) => {
           return (
             <Grid item md={4} key={product.name}>
-              <Card>
-                <NextLink href={`/product/${product.slug}`} passHref>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      image={product.image}
-                      title={product.name}
-                    ></CardMedia>
-                  </CardActionArea>
-                </NextLink>
-                <CardContent>
-                  <NextLink href={`/product/${product.slug}`} passHref>
-                    <Typography>{product.name}</Typography>
-                  </NextLink>
-                  <Rating value={product.rating} readOnly />
-                  <Typography>R{product.price}</Typography>
-                </CardContent>
-                <CardActions>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    color="primary"
-                    fontWeight="700"
-                    onClick={() => addToCartHandler(product)}
-                  >
-                    Add To Cart
-                  </Button>
-                </CardActions>
-              </Card>
+              <ProductItem
+                addToCartHandler={addToCartHandler}
+                product={product}
+              />
             </Grid>
           );
         })}

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/dist/client/router';
 import Head from 'next/head';
 import Cookies from 'js-cookie';
@@ -18,9 +18,23 @@ import {
   Button,
   Menu,
   MenuItem,
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  Divider,
+  ListItemText,
+  InputBase,
 } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+import CancelIcon from '@material-ui/icons/Cancel';
+import SearchIcon from '@material-ui/icons/Search';
 import useStyles from '../utils/styles';
 import { Store } from '../utils/Store';
+import { Drawer } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
+import { getError } from '../utils/error';
+import axios from 'axios';
 
 export default function Layout({ title, description, children }) {
   const router = useRouter();
@@ -56,6 +70,44 @@ export default function Layout({ title, description, children }) {
     },
   });
   const classes = useStyles();
+
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+
+  const sidebarOpenHandler = () => {
+    setSidebarVisible(true);
+  };
+  const sidebarCloseHandler = () => {
+    setSidebarVisible(false);
+  };
+
+  const [categories, setCategories] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await axios.get(`/api/products/categories`);
+      setCategories(data);
+    } catch (error) {
+      enqueueSnackbar(getError(error), { variant: 'error' });
+    }
+  };
+
+  const [query, setQuery] = useState('');
+
+  const queryChangeHandler = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    router.push(`/search?query=${query}`);
+  };
+
+  useEffect(() => {
+    fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const darkModeChangeHandler = () => {
     dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON' });
     const newDarkMode = !darkMode;
@@ -92,21 +144,87 @@ export default function Layout({ title, description, children }) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar position="static" className={classes.navbar}>
-          <Toolbar>
-            <NextLink href="/" passHref>
-              <Link>
-                <Image src="/images/logo.png" width={145} height={60} />
-              </Link>
-            </NextLink>
-            <div className={classes.grow}></div>
+          <Toolbar className={classes.toolbar} display="flex">
+            <Box display="flex" alignItems="center">
+              <IconButton
+                edge="start"
+                aria-label="open drawer"
+                onClick={sidebarOpenHandler}
+                className={classes.menuButton}
+              >
+                <MenuIcon className={classes.navbarButton}></MenuIcon>
+              </IconButton>
+              <NextLink href="/" passHref>
+                <Link>
+                  <Image
+                    src="/images/logo.png"
+                    width={155}
+                    height={55}
+                    alt="Cape Gadgets"
+                  />
+                </Link>
+              </NextLink>
+            </Box>
+
+            <Drawer
+              anchor="left"
+              open={sidebarVisible}
+              onClose={sidebarCloseHandler}
+            >
+              <List>
+                <ListItem>
+                  <Box alignItem="center" justifyContent="space-between">
+                    <Typography>Shopping By Category</Typography>
+                    <IconButton
+                      aria-label="close"
+                      onClick={sidebarCloseHandler}
+                    >
+                      <CancelIcon />
+                    </IconButton>
+                  </Box>
+                </ListItem>
+                <Divider light />
+                {categories.map((category) => (
+                  <NextLink
+                    href={`/search?category=${category}`}
+                    passHref
+                    key={category}
+                  >
+                    <ListItem
+                      button
+                      component="a"
+                      onClick={sidebarCloseHandler}
+                    >
+                      <ListItemText primary={category}></ListItemText>
+                    </ListItem>
+                  </NextLink>
+                ))}
+              </List>
+            </Drawer>
+
+            <div className={classes.searchSection}>
+              <form onSubmit={submitHandler} className={classes.searchForm}>
+                <InputBase
+                  name="query"
+                  placeholder="Search products"
+                  onChange={queryChangeHandler}
+                  className={classes.searchInput}
+                />
+                <IconButton
+                  className={classes.iconButton}
+                  type="submit"
+                  aria-label="search"
+                >
+                  <SearchIcon />
+                </IconButton>
+              </form>
+            </div>
             <div>
               <Switch
                 checked={darkMode}
                 onChange={darkModeChangeHandler}
               ></Switch>
-              <NextLink href="/" passHref>
-                <Link>Home</Link>
-              </NextLink>
+
               <NextLink href="/ebooks" passHref>
                 <Link>Ebooks</Link>
               </NextLink>
