@@ -49,7 +49,16 @@ const ProductPage = (props) => {
     //   return;
     // }
 
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
+    const name = product.title;
+    const price = 0;
+    const image = product.resource_links.cover_image;
+    const brand = product.publisher;
+    const category = 'ebook';
+
+    dispatch({
+      type: 'CART_ADD_ITEM',
+      payload: { name, price, image, brand, category, quantity },
+    });
     router.push('/cart');
   };
 
@@ -69,7 +78,7 @@ const ProductPage = (props) => {
           <Image
             src={ebook.resource_links.cover_image}
             alt={ebook.title}
-            width={480}
+            width={400}
             height={500}
             layout="responsive"
           />
@@ -126,7 +135,7 @@ const ProductPage = (props) => {
                   fullWidth
                   variant="contained"
                   color="primary"
-                  onClick={addToCartHandler}
+                  onClick={() => addToCartHandler(ebook)}
                 >
                   Add To Cart
                 </Button>
@@ -159,7 +168,7 @@ export async function getServerSideProps(context) {
   };
 
   const response = await fetch(
-    `https://api.vitalsource.com/v4/products/:${vbid}`,
+    `https://api.vitalsource.com/v4/products/${vbid}`,
     requestOptions,
   );
   const ebook = await response.json();

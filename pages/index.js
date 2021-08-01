@@ -17,6 +17,7 @@ import db from '../utils/db';
 import Product from '../models/Product';
 import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
+import Rating from '@material-ui/lab/Rating';
 
 export default function Home(props) {
   const { products } = props;
@@ -59,6 +60,7 @@ export default function Home(props) {
                   <NextLink href={`/product/${product.slug}`} passHref>
                     <Typography>{product.name}</Typography>
                   </NextLink>
+                  <Rating value={product.rating} readOnly />
                   <Typography>R{product.price}</Typography>
                 </CardContent>
                 <CardActions>
@@ -83,7 +85,7 @@ export default function Home(props) {
 
 export async function getServerSideProps() {
   await db.connect();
-  const products = await Product.find({}).lean();
+  const products = await Product.find({}, '-reviews').lean();
   await db.disconnect();
 
   return {

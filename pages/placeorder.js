@@ -38,6 +38,8 @@ const PlaceOrderPage = () => {
     cart: { cartItems, shippingAddress, paymentMethod },
   } = state;
 
+  console.log(cartItems);
+
   const round2 = (num) => Math.round(num * 100 + Number.EPSILON) / 100;
   const itemsPrice = round2(
     cartItems.reduce((a, c) => a + c.price * c.quantity, 0),
@@ -160,7 +162,7 @@ const PlaceOrderPage = () => {
                               </NextLink>
                             </TableCell>
                             <TableCell>
-                              <NextLink href={`/product/${item.slug}`} passHref>
+                              <NextLink href={`/product/${item.name}`} passHref>
                                 <Link>
                                   <Typography color="secondary">
                                     {item.name}

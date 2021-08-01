@@ -55,6 +55,15 @@ const useStyles = makeStyles({
   fullWidth: {
     width: '100%',
   },
+  reviewForm: {
+    maxWidth: 800,
+    width: '100%',
+  },
+  reviewIte: {
+    marginRight: '1rem',
+    borderRight: '1px solid #808080',
+    paddingRight: '1rem',
+  },
 });
 
 export default useStyles;
