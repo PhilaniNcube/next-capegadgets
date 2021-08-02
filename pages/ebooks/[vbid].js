@@ -77,9 +77,9 @@ const ProductPage = (props) => {
           <meta
             name="keywords"
             content={`Textbooks, ebooks, university ebooks, ${ebook.subjects.map(
-              (subject) => `${subject.name},`,
+              (subject) => `${subject.name}`,
             )} ,university textbooks, ${ebook.title}, ${ebook.contributors.map(
-              (author) => `${author.name},`,
+              (author) => `${author.name}`,
             )}`}
           ></meta>
           <meta property="og:site_name" content="Cape Gadgets" />
