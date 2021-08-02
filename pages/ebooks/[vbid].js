@@ -62,7 +62,7 @@ const ProductPage = (props) => {
   };
 
   return (
-    <Layout title={ebook.title} description={ebook.description}>
+    <Layout title={ebook.title}>
       <div className={classes.section}>
         <Head>
           <title>{ebook.title} | Cape Gadgets</title>
