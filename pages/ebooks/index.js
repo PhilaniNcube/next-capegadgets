@@ -17,7 +17,7 @@ import { Store } from '../../utils/Store';
 
 export default function Home(props) {
   const { result } = props;
-  console.log(result);
+
   const ebooks = result.items;
 
   const { state, dispatch } = useContext(Store);
@@ -40,7 +40,7 @@ export default function Home(props) {
 
   return (
     <Layout title="Home">
-      <Typography variant="h2">Products</Typography>
+      <Typography variant="h2">Ebooks</Typography>
       <Grid container spacing={3}>
         {ebooks.map((product) => {
           return (
@@ -59,7 +59,9 @@ export default function Home(props) {
                   <NextLink href={`/ebooks/${product.vbid}`} passHref>
                     <Typography>{product.title}</Typography>
                   </NextLink>
-                  <Typography>R{product.variants[0].prices[0]}</Typography>
+                  <Typography>
+                    R{(product.variants[0].prices[3].value * 18).toFixed(2)}
+                  </Typography>
                 </CardContent>
                 <CardActions>
                   <Button

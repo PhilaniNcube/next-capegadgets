@@ -50,7 +50,7 @@ const ProductPage = (props) => {
     // }
 
     const name = product.title;
-    const price = 0;
+    const price = (product.variants[0].prices[3].value * 18).toFixed(2);
     const image = product.resource_links.cover_image;
     const brand = product.publisher;
     const category = 'ebook';
@@ -111,7 +111,9 @@ const ProductPage = (props) => {
                     <Typography>Price</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography>R{ebook.variants[0].prices[0]}</Typography>
+                    <Typography>
+                      R{(ebook.variants[0].prices[3].value * 18).toFixed(2)}
+                    </Typography>
                   </Grid>
                 </Grid>
               </ListItem>
@@ -152,7 +154,7 @@ export default ProductPage;
 
 export async function getServerSideProps(context) {
   const { params } = context;
-  console.log(params);
+
   const { vbid } = params;
 
   const myHeaders = new Headers();
@@ -172,8 +174,6 @@ export async function getServerSideProps(context) {
     requestOptions,
   );
   const ebook = await response.json();
-
-  console.log(ebook);
 
   return {
     props: {
