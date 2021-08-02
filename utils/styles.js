@@ -105,6 +105,9 @@ const useStyles = makeStyles((theme) => ({
   sort: {
     marginRight: 5,
   },
+  author: {
+    color: '#208080',
+  },
 }));
 
 export default useStyles;

@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import {
-  Card,
   Button,
   Grid,
   Link,
@@ -66,7 +65,64 @@ const ProductPage = (props) => {
     <Layout title={ebook.title} description={ebook.description}>
       <div className={classes.section}>
         <Head>
-          <title>{ebook.name} | Cape Gadgets</title>
+          <title>{ebook.title} | Cape Gadgets</title>
+          <meta
+            name="Description"
+            CONTENT={`Author: ${
+              ebook.contributors[0].name
+            }, Category: eBooks, Price: R ${(
+              ebook.variants[0].prices[3].value * 18
+            ).toFixed(2)}`}
+          ></meta>
+          <meta
+            name="keywords"
+            content={`Textbooks, ebooks, university ebooks, ${ebook.subjects.map(
+              (subject) => `${subject.name},`,
+            )} ,university textbooks, ${ebook.title}, ${ebook.contributors.map(
+              (author) => `${author.name},`,
+            )}`}
+          ></meta>
+          <meta property="og:site_name" content="Cape Gadgets" />
+          <meta property="og:title" content={ebook.title} />
+          <meta property="og:type" content="book" />
+          <meta
+            property="og:url"
+            content={`https://capegadgets.co.za/ebooks/${ebook.vbid}`}
+          ></meta>
+
+          <meta
+            property="og:image"
+            content={ebook.resource_links.cover_image}
+          />
+          <meta property="og:image:width" content="50"></meta>
+          <meta property="og:image:height" content="75"></meta>
+          <meta
+            property="book:author"
+            content={ebook.contributors[0].name}
+          ></meta>
+          <meta
+            property="book:isbn"
+            content={ebook.identifiers.eisbn_canonical}
+          ></meta>
+          <meta property="book:tag" content={ebook.subjects[1].name}></meta>
+
+          <meta
+            property="twitter:card"
+            content={ebook.resource_links.cover_image}
+          />
+          <meta
+            property="twitter:url"
+            content={`https://capegadgets.co.za/ebooks/${ebook.vbid}`}
+          />
+          <meta property="twitter:title" content={ebook.title} />
+          <meta
+            property="twitter:description"
+            content={`${ebook.subjects[1].name} Ebook available for sale at Cape Gadgets Learning & Lifestyle`}
+          />
+          <meta
+            property="twitter:image"
+            content={ebook.resource_links.cover_image}
+          ></meta>
         </Head>
 
         <NextLink href="/" passHref>
@@ -83,7 +139,7 @@ const ProductPage = (props) => {
             layout="responsive"
           />
         </Grid>
-        <Grid item md={3} xs={12}>
+        <Grid item md={6} xs={12}>
           <List>
             <ListItem>
               <Typography>{ebook.title}</Typography>
@@ -98,52 +154,44 @@ const ProductPage = (props) => {
               <Typography>Publisher: {ebook.publisher}</Typography>
             </ListItem>
             <ListItem>
-              <Typography>Description: {ebook.kind}</Typography>
+              <Grid container>
+                <Grid item xs={12}>
+                  <Typography>Subjects: {ebook.subjects[1].name}</Typography>
+                </Grid>
+              </Grid>
+            </ListItem>
+
+            <ListItem>
+              <Typography component="span">Status</Typography>
+              <Typography>
+                {ebook.variants[0].distributable
+                  ? ': Available'
+                  : ': Unavailable'}
+              </Typography>
+            </ListItem>
+            <ListItem>
+              <Typography>ISBN: {ebook.identifiers.eisbn_canonical}</Typography>
+            </ListItem>
+            <ListItem>
+              <Typography>
+                Print ISBN: {ebook.identifiers.print_isbn_canonical}
+              </Typography>
+            </ListItem>
+            <ListItem>
+              <Typography variant="h2">
+                R{(ebook.variants[0].prices[3].value * 18).toFixed(2)}
+              </Typography>
+            </ListItem>
+            <ListItem>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => addToCartHandler(ebook)}
+              >
+                Add To Cart
+              </Button>
             </ListItem>
           </List>
-        </Grid>
-        <Grid item md={3} xs={12}>
-          <Card>
-            <List>
-              <ListItem>
-                <Grid container>
-                  <Grid item xs={6}>
-                    <Typography>Price</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography>
-                      R{(ebook.variants[0].prices[3].value * 18).toFixed(2)}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container>
-                  <Grid item xs={6}>
-                    <Typography>Status</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography>
-                      {ebook.variants[0].distributable
-                        ? 'Available'
-                        : 'Unavailable'}
-                    </Typography>
-                    <Typography>ISBN: {ebook.vbid}</Typography>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={() => addToCartHandler(ebook)}
-                >
-                  Add To Cart
-                </Button>
-              </ListItem>
-            </List>
-          </Card>
         </Grid>
       </Grid>
     </Layout>
@@ -170,7 +218,7 @@ export async function getServerSideProps(context) {
   };
 
   const response = await fetch(
-    `https://api.vitalsource.com/v4/products/${vbid}`,
+    `https://api.vitalsource.com/v4/products/${vbid}?include_details=subjects`,
     requestOptions,
   );
   const ebook = await response.json();
