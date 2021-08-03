@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
@@ -17,6 +17,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from '@material-ui/core';
 import { Store } from '../../utils/Store';
@@ -25,8 +26,6 @@ import axios from 'axios';
 import useStyles from '../../utils/styles';
 import { useSnackbar } from 'notistack';
 import { getError } from '../../utils/error';
-// eslint-disable-next-line no-unused-vars
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -68,8 +67,9 @@ function reducer(state, action) {
 
 const OrderPage = ({ params }) => {
   const orderId = params.id;
-  // eslint-disable-next-line no-unused-vars
-  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+
+  const [cardNumber, setCardNumber] = useState('');
+
   const classes = useStyles();
   const router = useRouter();
   console.log(router.query.payment);
@@ -83,19 +83,25 @@ const OrderPage = ({ params }) => {
   useEffect(() => {
     if (router.query.payment === 'success') {
       const paymentResponse = async () => {
-        const token = localStorage.setItem('intelliToken');
-        const paymentRes = await axios.post(
-          `https://test.intellimali.co.za/web/payment`,
+        const token = localStorage.getItem('intelliToken');
+        const card = localStorage.getItem('cardNumber');
+        const paymentRes = await axios.put(
+          `/api/orders/${order._id}/pay`,
           {
             username: 'capegadgets',
             password: '9d059e3fb4efe73760d5ecee6909c2d2',
-            cardNumber: '6374374100353717',
+            cardNumber: card,
             terminalId: '94DVA001',
             amount: order.totalPrice,
             redirectSuccess: `${process.env.REDIRECT_URL}/order/${order._id}?payment=success`,
             redirectCancel: `${process.env.REDIRECT_URL}/order/${order._id}?payment=cancel`,
             reference: order._id,
             token: token,
+          },
+          {
+            headers: {
+              authorization: `Bearer ${userInfo.token}`,
+            },
           },
         );
         console.log(paymentRes);
@@ -150,42 +156,13 @@ const OrderPage = ({ params }) => {
       if (successShipping) {
         dispatch({ type: 'SHIPPING_RESET' });
       }
-    } else {
-      // Load paypal script
-      const loadPaypalScript = async () => {
-        const { data: clientId } = await axios.get('/api/keys/paypal', {
-          headers: {
-            authorization: `Bearer ${userInfo.token}`,
-          },
-        });
-
-        paypalDispatch({
-          type: 'resetOptions',
-          value: {
-            'client-id': clientId,
-            currency: 'USD',
-          },
-        });
-        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
-      };
-      loadPaypalScript();
     }
-  }, [
-    error,
-    order,
-    orderId,
-    paypalDispatch,
-    router,
-    successPay,
-    successShipping,
-    userInfo,
-  ]);
+  }, [error, order, orderId, router, successPay, successShipping, userInfo]);
 
-  console.log(userInfo.token);
   console.log(order);
   const tokenRequest = async () => {
     if (order._id) {
-      const response = await axios.get(
+      const response = await axios.post(
         `/api/orders/${order._id}/token`,
         {
           username: 'capegadgets',
@@ -195,7 +172,7 @@ const OrderPage = ({ params }) => {
           amount: order.totalPrice,
           redirectSuccess: `http://localhost:3000/order/${order._id}?payment=success`,
           redirectCancel: `http://localhost:3000/order/${order._id}?payment=cancel`,
-          reference: 'testexample',
+          reference: order._id,
         },
         {
           headers: {
@@ -213,26 +190,26 @@ const OrderPage = ({ params }) => {
   // eslint-disable-next-line no-unused-vars
   const { closeSnackbar, enqueueSnackbar } = useSnackbar();
   // eslint-disable-next-line no-unused-vars
-  const onApprove = (data, actions) => {
-    return actions.order.capture().then(async function(details) {
-      try {
-        dispatch({ type: 'PAY_REQUEST' });
-        const { data } = await axios.put(
-          `/api/orders/${order._id}/pay`,
-          details,
-          {
-            headers: {
-              authorization: `Bearer ${userInfo.token}`,
-            },
+  const onApprove = async (token) => {
+    try {
+      dispatch({ type: 'PAY_REQUEST' });
+      const { data } = await axios.put(
+        `/api/orders/${order._id}/pay`,
+        {
+          token: token,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.token}`,
           },
-        );
-        dispatch({ type: 'PAY_SUCCESS', payload: data });
-        enqueueSnackbar('Order has been paid', { variant: 'success' });
-      } catch (error) {
-        dispatch({ type: 'PAY_ERROR', payload: getError(error) });
-        enqueueSnackbar(getError(error), { variant: 'error' });
-      }
-    });
+        },
+      );
+      dispatch({ type: 'PAY_SUCCESS', payload: data });
+      enqueueSnackbar('Order has been paid', { variant: 'success' });
+    } catch (error) {
+      dispatch({ type: 'PAY_ERROR', payload: getError(error) });
+      enqueueSnackbar(getError(error), { variant: 'error' });
+    }
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -268,6 +245,12 @@ const OrderPage = ({ params }) => {
       enqueueSnackbar(getError(error), { variant: 'error' });
     }
   }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem('cardNumber', cardNumber);
+    tokenRequest();
+  };
 
   return (
     <Layout title={`Order ${orderId}`}>
@@ -428,15 +411,29 @@ const OrderPage = ({ params }) => {
                 </ListItem>
                 {!isPaid && paymentMethod === 'Intellimali' && (
                   <ListItem>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                      onClick={() => tokenRequest()}
-                    >
-                      {' '}
-                      Pay With Intellimali{' '}
-                    </Button>
+                    <form onSubmit={handleSubmit}>
+                      <TextField
+                        type="text"
+                        id="cardNumber"
+                        name="cardNumber"
+                        fullWidth
+                        label="Intelli Card Number"
+                        variant="outlined"
+                        value={cardNumber}
+                        onChange={(e) => setCardNumber(e.target.value)}
+                      />
+
+                      <Button
+                        className={classes.mt1}
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        type="submit"
+                      >
+                        {' '}
+                        Pay With Intellimali{' '}
+                      </Button>
+                    </form>
                   </ListItem>
                 )}
                 {userInfo.isAdmin && order.isPaid && !order.isShipped && (

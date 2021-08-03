@@ -28,6 +28,7 @@ const orderSchema = new mongoose.Schema(
       id: { type: String },
       status: { type: String },
       email_address: { type: String },
+      traId: { type: String },
     },
     itemsPrice: { type: Number, required: true },
     shippingPrice: { type: Number, required: true },

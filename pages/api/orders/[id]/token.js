@@ -8,10 +8,10 @@ import axios from 'axios';
 
 const handler = nc({ onError });
 
-handler.get(async (req, res) => {
-  console.log('Hello', req.body);
+handler.post(async (req, res) => {
   await db.connect();
   const order = await Order.findById(req.query.id);
+  console.log(req);
 
   if (order) {
     const response = await axios.post(
@@ -19,7 +19,7 @@ handler.get(async (req, res) => {
       {
         username: 'capegadgets',
         password: '9d059e3fb4efe73760d5ecee6909c2d2',
-        cardNumber: '6374374100353717',
+        cardNumber: req.body.cardNumber,
         terminalId: '94DVA001',
         amount: order.totalPrice,
         redirectSuccess: `${process.env.REDIRECT_URL}/order/${order._id}?payment=success`,
@@ -34,7 +34,7 @@ handler.get(async (req, res) => {
     );
 
     await db.disconnect();
-    console.log(response.data);
+
     res.send(response.data);
   } else {
     await db.disconnect();
