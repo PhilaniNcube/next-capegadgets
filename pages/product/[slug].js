@@ -106,7 +106,34 @@ const ProductPage = (props) => {
       <div className={classes.section}>
         <Head>
           <title>{product.name} | Cape Gadgets</title>
-          <meta name="description" content={product.description} />
+
+          <meta name="Description" content={product.description}></meta>
+          <meta
+            name="keywords"
+            content={`${(product.brand, product.category)}`}
+          ></meta>
+          <meta property="og:site_name" content="Cape Gadgets" />
+          <meta property="og:title" content={product.name} />
+          <meta property="og:type" content={product.category} />
+          <meta
+            property="og:url"
+            content={`https://capegadgets.co.za/product/${product.slug}`}
+          ></meta>
+
+          <meta property="og:image" content={product.image} />
+          <meta property="og:image:width" content="50"></meta>
+          <meta property="og:image:height" content="50"></meta>
+          <meta property="twitter:card" content={product.image} />
+          <meta
+            property="twitter:url"
+            content={`https://capegadgets.co.za/product/${product.slug}`}
+          />
+          <meta property="twitter:title" content={product.name} />
+          <meta
+            property="twitter:description"
+            content={`${product.description}`}
+          />
+          <meta property="twitter:image" content={product.image}></meta>
         </Head>
 
         <NextLink href="/" passHref>
@@ -126,7 +153,9 @@ const ProductPage = (props) => {
         <Grid item md={3} xs={12}>
           <List>
             <ListItem>
-              <Typography>{product.name}</Typography>
+              <Typography component="h1" variant="h1">
+                {product.name}
+              </Typography>
             </ListItem>
             <ListItem>
               <Typography>Category: {product.category}</Typography>
