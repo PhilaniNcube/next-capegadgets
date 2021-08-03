@@ -81,7 +81,7 @@ const OrderPage = ({ params }) => {
   ] = useReducer(reducer, { loading: true, order: {}, error: '' });
 
   useEffect(() => {
-    if (router.query.payment === 'success') {
+    if (router.query.payment === 'success' && order._id) {
       const paymentResponse = async () => {
         const token = localStorage.getItem('intelliToken');
         const card = localStorage.getItem('cardNumber');
@@ -108,7 +108,7 @@ const OrderPage = ({ params }) => {
       };
       paymentResponse();
     }
-  }, [order._id, order.totalPrice, router.query.payment]);
+  }, [order.totalPrice, router.query.payment, userInfo.token]);
 
   const {
     shippingAddress,
