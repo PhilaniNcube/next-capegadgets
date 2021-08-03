@@ -108,6 +108,29 @@ const useStyles = makeStyles((theme) => ({
   author: {
     color: '#208080',
   },
+  carousel: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    minHeight: 300,
+  },
+  featuredText: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    textDecoration: 'none',
+  },
+  title: {
+    fontSize: '2.5rem',
+    fontWeight: 'bold',
+  },
+  priceGrid: {
+    fontSize: '2.2rem',
+    padding: '.5rem 1rem',
+    backgroundColor: 'blue',
+    width: 'fit-content',
+    color: '#fff',
+    borderRadius: 5,
+  },
 }));
 
 export default useStyles;

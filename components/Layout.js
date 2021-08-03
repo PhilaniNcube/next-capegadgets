@@ -13,7 +13,6 @@ import {
   createTheme,
   ThemeProvider,
   CssBaseline,
-  Switch,
   Badge,
   Button,
   Menu,
@@ -108,11 +107,11 @@ export default function Layout({ title, description, children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const darkModeChangeHandler = () => {
-    dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON' });
-    const newDarkMode = !darkMode;
-    Cookies.set('darkMode', newDarkMode ? 'ON' : 'OFF');
-  };
+  // const darkModeChangeHandler = () => {
+  //   dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON' });
+  //   const newDarkMode = !darkMode;
+  //   Cookies.set('darkMode', newDarkMode ? 'ON' : 'OFF');
+  // };
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -158,8 +157,8 @@ export default function Layout({ title, description, children }) {
                 <Link>
                   <Image
                     src="/images/logo.png"
-                    width={155}
-                    height={55}
+                    width={100}
+                    height={45}
                     alt="Cape Gadgets"
                   />
                 </Link>
@@ -184,6 +183,11 @@ export default function Layout({ title, description, children }) {
                   </Box>
                 </ListItem>
                 <Divider light />
+                <NextLink href={`/ebooks`} passHref>
+                  <ListItem button component="a" onClick={sidebarCloseHandler}>
+                    <ListItemText primary="Ebooks"></ListItemText>
+                  </ListItem>
+                </NextLink>
                 {categories.map((category) => (
                   <NextLink
                     href={`/search?category=${category}`}
@@ -220,14 +224,6 @@ export default function Layout({ title, description, children }) {
               </form>
             </div>
             <div>
-              <Switch
-                checked={darkMode}
-                onChange={darkModeChangeHandler}
-              ></Switch>
-
-              <NextLink href="/ebooks" passHref>
-                <Link>Ebooks</Link>
-              </NextLink>
               <NextLink href="/cart" passHref>
                 <Link>
                   {cart.cartItems.length > 0 ? (
