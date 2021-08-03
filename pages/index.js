@@ -35,11 +35,17 @@ export default function Home(props) {
   };
 
   return (
-    <Layout title="Home">
+    <Layout title="Home" description="For all your learning & technology items. Avalable for purchase on intellimali. With the widest range of university and professional ebooks. Over 700 000 ebook titles.">
       <Carousel className={classes.mt1} animation="slide">
         {featuredProducts.map((product) => {
           return (
-            <Grid fullWidth key={product.slug}>
+            <Grid
+              container
+              direction="column"
+              key={product.slug}
+              justifyContent="center"
+              className={classes.grid}
+            >
               <Image
                 src={product.image}
                 width={500}

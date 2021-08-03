@@ -131,6 +131,13 @@ const useStyles = makeStyles((theme) => ({
     color: '#fff',
     borderRadius: 5,
   },
+  grid: {
+    maxWidth: '500px',
+    margin: '0 auto',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
 }));
 
 export default useStyles;
