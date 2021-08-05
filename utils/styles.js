@@ -138,6 +138,13 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     textAlign: 'center',
   },
+  heading: {
+    margin: '2rem',
+    textAlign: 'center',
+    fontSize: '4rem',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
 }));
 
 export default useStyles;

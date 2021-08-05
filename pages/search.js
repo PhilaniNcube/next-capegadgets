@@ -144,7 +144,7 @@ const Search = (props) => {
   return (
     <Layout title="Search">
       <Grid container className={classes.mt1} spacing={1}>
-        <Grid item md={3}>
+        <Grid item md={4}>
           <List>
             <ListItem>
               <Box className={classes.fullWidth}>
@@ -206,7 +206,7 @@ const Search = (props) => {
           </List>
         </Grid>
 
-        <Grid item md={9}>
+        <Grid item md={8}>
           <Grid container justifyContent="space-between" alignItems="center">
             <Grid item>
               {products.length === 0 ? 'No' : countProducts} Results
@@ -226,7 +226,9 @@ const Search = (props) => {
               ) : null}
             </Grid>
             <Grid item>
-              <Typography>Sort By</Typography>
+              <Typography component="span" className={classes.sort}>
+                Sort By
+              </Typography>
               <Select value={sort} onChange={sortHandler}>
                 <MenuItem value="featured">Featured</MenuItem>
                 <MenuItem value="lowest">Price: Low to High</MenuItem>
@@ -279,7 +281,7 @@ export async function getServerSideProps({ query }) {
 
   const sort = query.sort || '';
 
-  const searchQuery = query.searchQuery || '';
+  const searchQuery = query.query || '';
 
   const queryFilter =
     searchQuery && searchQuery !== 'all'

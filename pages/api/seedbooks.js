@@ -4,39 +4,44 @@ import db from '../../utils/db';
 
 const handler = nc();
 
-for (let index = 1; index < 775; index++) {
-  handler.get(async (req, res) => {
-    try {
-      const myHeaders = new Headers();
-      myHeaders.append(
-        'X-VitalSource-API-Key',
-        process.env.NEXT_PUBLIC_VITALSOURCE_API_KEY,
-      );
+handler.get(async (req, res) => {
+  await db.connect();
 
-      const requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow',
-      };
+  try {
+    const myHeaders = new Headers();
 
+    await Ebook.deleteMany();
+    myHeaders.append(
+      'X-VitalSource-API-Key',
+      process.env.NEXT_PUBLIC_VITALSOURCE_API_KEY,
+    );
+    const requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+    };
+
+    let i = 1;
+
+    while (i < 45) {
       const response = await fetch(
-        `https://api.vitalsource.com/v4/products?page=${index}?include_details=metadata,subjects`,
+        `https://api.vitalsource.com/v4/products?page=${i}&include_details=subjects,metadata,identifiers`,
         requestOptions,
       );
-      const result = await response.json();
-      const { items } = result;
 
-      await db.connect();
-      await Ebook.deleteMany();
+      const result = await response.json();
+
+      const { items } = result;
       await Ebook.insertMany(items);
-      // return items;
-      await db.disconnect();
-      res.send({ message: `Seeded page ${index}` });
-    } catch (error) {
-      console.log(error);
-      res.send({ message: error });
+      i++;
     }
-  });
-}
+    db.disconnect();
+    res.send({ message: 'Seeded successfully' });
+    // return items;
+  } catch (error) {
+    console.log(error);
+    res.send({ message: error });
+  }
+});
 
 export default handler;

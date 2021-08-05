@@ -99,6 +99,12 @@ export default function Layout({ title, description, children }) {
 
   const submitHandler = (e) => {
     e.preventDefault();
+
+    if (router.pathname === '/ebooks') {
+      router.push(`/ebooks?title=${query}`);
+      return;
+    }
+
     router.push(`/search?query=${query}`);
   };
 
@@ -206,11 +212,11 @@ export default function Layout({ title, description, children }) {
               </List>
             </Drawer>
 
-            <div className={classes.searchSection}>
+            <div className={`${classes.searchSection} ${classes.mt1}`}>
               <form onSubmit={submitHandler} className={classes.searchForm}>
                 <InputBase
                   name="query"
-                  placeholder="Search products"
+                  placeholder="Search"
                   onChange={queryChangeHandler}
                   className={classes.searchInput}
                 />
@@ -223,6 +229,7 @@ export default function Layout({ title, description, children }) {
                 </IconButton>
               </form>
             </div>
+
             <div>
               <NextLink href="/cart" passHref>
                 <Link>
