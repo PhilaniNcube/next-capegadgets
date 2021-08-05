@@ -16,11 +16,12 @@ import Layout from '../../components/Layout';
 // import { Store } from '../../utils/Store';
 import useStyles from '../../utils/styles';
 import Head from 'next/head';
+import db from '../../utils/db';
+import Ebook from '../../models/Ebook';
 
 export default function Home(props) {
-  const { result } = props;
-  const ebooks = result.items;
-  console.log(result.items);
+  console.log(props);
+  const { ebooks } = props;
 
   const classes = useStyles();
 
@@ -90,25 +91,16 @@ export default function Home(props) {
 
 // eslint-disable-next-line no-unused-vars
 export async function getServerSideProps(context) {
-  const myHeaders = new Headers();
-  myHeaders.append(
-    'X-VitalSource-API-Key',
-    process.env.NEXT_PUBLIC_VITALSOURCE_API_KEY,
-  );
+  await db.connect();
+  const ebooks = await Ebook.find({}, '-created')
+    .lean()
+    .limit(200);
 
-  const requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow',
-  };
-
-  const response = await fetch(
-    'https://api.vitalsource.com/v4/products?include_details=subjects',
-    requestOptions,
-  );
-  const result = await response.json();
+  await db.disconnect();
 
   return {
-    props: { result }, // will be passed to the page component as props
+    props: {
+      ebooks: ebooks.map(db.convertDocToObj),
+    },
   };
 }

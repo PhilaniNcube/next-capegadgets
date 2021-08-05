@@ -17,6 +17,8 @@ import Layout from '../../components/Layout';
 
 import { Store } from '../../utils/Store';
 import { useRouter } from 'next/dist/client/router';
+import Ebook from '../../models/Ebook';
+import db from '../../utils/db';
 
 const ProductPage = (props) => {
   const router = useRouter();
@@ -76,11 +78,12 @@ const ProductPage = (props) => {
           ></meta>
           <meta
             name="keywords"
-            content={`Textbooks, ebooks, university ebooks, ${ebook.subjects.map(
-              (subject) => `${subject.name}`,
-            )} ,university textbooks, ${ebook.title}, ${ebook.contributors.map(
-              (author) => `${author.name}`,
-            )}`}
+            content={`Textbooks, ebooks, university ebooks, ${ebook.subjects &&
+              ebook.subjects.map(
+                (subject) => `${subject.name}`,
+              )} ,university textbooks, ${
+              ebook.title
+            }, ${ebook.contributors.map((author) => `${author.name}`)}`}
           ></meta>
           <meta property="og:site_name" content="Cape Gadgets" />
           <meta property="og:title" content={ebook.title} />
@@ -104,7 +107,6 @@ const ProductPage = (props) => {
             property="book:isbn"
             content={ebook.identifiers.eisbn_canonical}
           ></meta>
-          <meta property="book:tag" content={ebook.subjects[1].name}></meta>
 
           <meta
             property="twitter:card"
@@ -115,10 +117,7 @@ const ProductPage = (props) => {
             content={`https://capegadgets.co.za/ebooks/${ebook.vbid}`}
           />
           <meta property="twitter:title" content={ebook.title} />
-          <meta
-            property="twitter:description"
-            content={`${ebook.subjects[1].name} Ebook available for sale at Cape Gadgets Learning & Lifestyle`}
-          />
+
           <meta
             property="twitter:image"
             content={ebook.resource_links.cover_image}
@@ -156,7 +155,9 @@ const ProductPage = (props) => {
             <ListItem>
               <Grid container>
                 <Grid item xs={12}>
-                  <Typography>Subjects: {ebook.subjects[1].name}</Typography>
+                  <Typography>
+                    Subjects: {ebook.subjects[0] && ebook.subjects[0].name}
+                  </Typography>
                 </Grid>
               </Grid>
             </ListItem>
@@ -202,30 +203,14 @@ export default ProductPage;
 
 export async function getServerSideProps(context) {
   const { params } = context;
-
   const { vbid } = params;
-
-  const myHeaders = new Headers();
-  myHeaders.append(
-    'X-VitalSource-API-Key',
-    process.env.NEXT_PUBLIC_VITALSOURCE_API_KEY,
-  );
-
-  const requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow',
-  };
-
-  const response = await fetch(
-    `https://api.vitalsource.com/v4/products/${vbid}?include_details=subjects`,
-    requestOptions,
-  );
-  const ebook = await response.json();
+  await db.connect();
+  const ebook = await Ebook.findOne({ vbid }, '-created').lean();
+  await db.disconnect();
 
   return {
     props: {
-      ebook,
+      ebook: db.convertDocToObj(ebook),
     },
   };
 }
