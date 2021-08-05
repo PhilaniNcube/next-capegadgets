@@ -45,7 +45,7 @@ export default function Home(props) {
       <Grid container spacing={3}>
         {ebooks.map((product) => {
           return (
-            <Grid item md={4} key={product.vbid}>
+            <Grid item md={3} key={product.vbid}>
               <Card>
                 <NextLink href={`/ebooks/${product.vbid}`} passHref>
                   <CardActionArea>
@@ -58,7 +58,7 @@ export default function Home(props) {
                 </NextLink>
                 <CardContent>
                   <NextLink href={`/ebooks/${product.vbid}`} passHref>
-                    <Typography>{product.title}</Typography>
+                    <Typography>{product.title.substring(0, 50)}...</Typography>
                   </NextLink>
                   <Typography className={classes.author}>
                     Author: {product.contributors[0].name}
