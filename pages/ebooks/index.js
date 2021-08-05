@@ -12,8 +12,6 @@ import {
   Grid,
   List,
   ListItem,
-  MenuItem,
-  Select,
   Typography,
 } from '@material-ui/core';
 
@@ -27,6 +25,7 @@ import Ebook from '../../models/Ebook';
 
 import { Pagination } from '@material-ui/lab';
 
+// eslint-disable-next-line no-unused-vars
 const prices = [
   {
     name: 'R1 - R500',
