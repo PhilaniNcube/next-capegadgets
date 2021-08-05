@@ -65,6 +65,7 @@ export default function Home(props) {
 
   const classes = useStyles();
 
+  // eslint-disable-next-line no-unused-vars
   const { query = 'all', price = 'all' } = router.query;
 
   // const { state, dispatch } = useContext(Store);
@@ -86,6 +87,7 @@ export default function Home(props) {
     router.push({ pathname: path, query: query });
   };
 
+  // eslint-disable-next-line no-unused-vars
   const priceHandler = (e) => {
     filterSearch({ price: e.target.value });
   };
@@ -120,16 +122,9 @@ export default function Home(props) {
           <List>
             <ListItem>
               <Box className={classes.fullWidth}>
-                <Typography>Prices</Typography>
-                <Select fullWidth value={price} onChange={priceHandler}>
-                  <MenuItem value="all">All</MenuItem>
-                  {prices &&
-                    prices.map((price) => (
-                      <MenuItem key={price.value} value={price.value}>
-                        {price.name}
-                      </MenuItem>
-                    ))}
-                </Select>
+                <Typography>
+                  {countEbooks} ebooks meet your search criteria
+                </Typography>
               </Box>
             </ListItem>
           </List>
