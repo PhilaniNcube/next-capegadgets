@@ -14,8 +14,6 @@ class APIFeatures {
         }
       : {};
 
-    console.log(title);
-
     this.query = this.query.find({ ...title });
     return this;
   }

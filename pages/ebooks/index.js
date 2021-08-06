@@ -59,7 +59,6 @@ const prices = [
 
 export default function Home(props) {
   const { ebooks, countEbooks, pages } = props;
-  console.log(ebooks, countEbooks);
   const router = useRouter();
 
   const classes = useStyles();
@@ -193,7 +192,7 @@ export default function Home(props) {
 // eslint-disable-next-line no-unused-vars
 export async function getServerSideProps({ query }) {
   console.log(query);
-  const pageSize = query.pageSize || 30;
+  const pageSize = query.pageSize || 48;
   const page = query.page || 1;
   const searchQuery = query.title || '';
   const price = query.price || '';

@@ -36,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
   price: {
     width: '100%',
     fontWeight: 700,
+    fontSize: '1.8rem',
+    color: '#208080',
   },
   footer: {
     textAlign: 'center',

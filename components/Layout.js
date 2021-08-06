@@ -208,7 +208,13 @@ export default function Layout({ title, description, children }) {
                       <ShoppingCartIcon />
                     </Badge>
                   ) : (
-                    <ShoppingCartIcon />
+                    <Badge
+                      color="secondary"
+                      size="large"
+                      badgeContent={cart.cartItems.length}
+                    >
+                      <ShoppingCartIcon />
+                    </Badge>
                   )}
                 </Link>
               </NextLink>
