@@ -9,9 +9,11 @@ import Layout from '../components/Layout';
 import { Store } from '../utils/Store';
 
 import ProductItem from '../components/ProductItem';
+import SearchForm from '../components/SearchForm';
 import Carousel from 'react-material-ui-carousel';
 import useStyles from '../utils/styles';
 import Image from 'next/image';
+
 
 export default function Home(props) {
   const classes = useStyles();
@@ -64,6 +66,7 @@ export default function Home(props) {
           );
         })}
       </Carousel>
+      <SearchForm />
       <Typography variant="h2">Popular Products</Typography>
       <Grid container spacing={3}>
         {topRatedProducts.map((product) => {

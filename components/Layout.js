@@ -147,8 +147,8 @@ export default function Layout({ title, description, children }) {
                 <Link>
                   <Image
                     src="/images/logo.png"
-                    width={100}
-                    height={45}
+                    width={115}
+                    height={40}
                     alt="Cape Gadgets"
                   />
                 </Link>

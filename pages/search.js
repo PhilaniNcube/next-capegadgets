@@ -20,6 +20,7 @@ import { Store } from '../utils/Store';
 import axios from 'axios';
 import Rating from '@material-ui/lab/Rating';
 import { Pagination } from '@material-ui/lab';
+import SearchForm from '../components/SearchForm';
 
 const PAGE_SIZE = 18;
 
@@ -202,6 +203,9 @@ const Search = (props) => {
                     ))}
                 </Select>
               </Box>
+            </ListItem>
+            <ListItem>
+              <SearchForm />
             </ListItem>
           </List>
         </Grid>
