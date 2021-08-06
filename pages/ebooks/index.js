@@ -107,15 +107,17 @@ export default function Home(props) {
         <meta property="og:site_name" content="Cape Gadgets" />
         <meta property="og:title" content="Ebooks for sale" />
       </Head>
-      <Typography
-        variant="h1"
-        component="h1"
-        className={classes.heading}
-        color="secondary"
-      >
-        Ebooks
+      <Box className={classes.hero}>
+        <Typography variant="h1" component="h1" className={classes.pageTitle}>
+          Ebooks
+        </Typography>
+        <Typography component="p" className={classes.subtitle}>
+          With one of the largest catalogues of prescribed university ebooks
+          anywhere. Over 700 000 ebooks available
+        </Typography>
         <SearchForm placeholder="Ebook title" />
-      </Typography>
+      </Box>
+
       <Grid container spacing={2} className={classes.mt1}>
         <Grid item md={2}>
           <List>

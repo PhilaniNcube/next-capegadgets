@@ -152,6 +152,33 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },
+  hero: {
+    marginTop: '2rem',
+    borderRadius: '.3rem',
+    width: '100%',
+    minHeight: '70vh',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    padding: '3rem',
+    backgroundImage: `linear-gradient(to bottom, rgba(245, 246, 252, 0.52), rgba(117, 19, 93, 0.73)),
+    url('images/ebooks.jpg')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center',
+    backgroundRepeat: 'no-repeat',
+  },
+  pageTitle: {
+    fontSize: 'clamp(3rem, 2.3878rem + 3.2653vw, 5rem)',
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+
+  subtitle: {
+    maxWidth: '55ch',
+    color: '#fff',
+    fontSize: 'clamp(.8rem, 1.1776rem, 1.8rem)',
+    lineHeight: '1.1',
+  },
 }));
 
 export default useStyles;
