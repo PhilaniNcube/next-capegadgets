@@ -2,7 +2,6 @@ import React from 'react';
 import NextLink from 'next/link';
 import {
   Card,
-  CardMedia,
   CardActionArea,
   CardContent,
   Typography,
@@ -10,17 +9,19 @@ import {
   Button,
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
+import Image from 'next/image';
 
 const ProductItem = ({ product, addToCartHandler }) => {
   return (
     <Card>
       <NextLink href={`/product/${product.slug}`} passHref>
         <CardActionArea>
-          <CardMedia
-            component="img"
-            image={product.image}
-            title={product.name}
-          ></CardMedia>
+          <Image
+            src={product.image}
+            width={500}
+            height={500}
+            alt={product.name}
+          />
         </CardActionArea>
       </NextLink>
       <CardContent>

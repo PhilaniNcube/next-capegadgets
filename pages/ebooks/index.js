@@ -8,13 +8,12 @@ import {
   CardActionArea,
   CardActions,
   CardContent,
-  CardMedia,
   Grid,
   List,
   ListItem,
   Typography,
 } from '@material-ui/core';
-
+import Image from 'next/image';
 import NextLink from 'next/link';
 import Layout from '../../components/Layout';
 // import { Store } from '../../utils/Store';
@@ -136,11 +135,12 @@ export default function Home(props) {
                   <Card>
                     <NextLink href={`/ebooks/${product.vbid}`} passHref>
                       <CardActionArea>
-                        <CardMedia
-                          component="img"
-                          image={product.resource_links.cover_image}
-                          title={product.title}
-                        ></CardMedia>
+                        <Image
+                          src={product.resource_links.cover_image}
+                          alt={product.title}
+                          width={480}
+                          height={697}
+                        />
                       </CardActionArea>
                     </NextLink>
                     <CardContent>
