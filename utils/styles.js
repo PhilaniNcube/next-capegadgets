@@ -1,5 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 
+// eslint-disable-next-line no-unused-vars
 const useStyles = makeStyles((theme) => ({
   navbar: {
     backgroundColor: '#efefef',
@@ -76,18 +77,22 @@ const useStyles = makeStyles((theme) => ({
 
   // search
   searchSection: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
+    height: '3rem',
+    display: 'flex',
+    maxWidth: '220px',
   },
   searchForm: {
-    border: '1px solid #fff',
-    backgroundColor: '#fff',
+    height: '100%',
+    width: '100%',
+    border: '1px solid #efefef',
+    backgroundColor: '#efefef',
     borderRadius: 5,
+    maxWidth: '220px',
+    display: 'flex',
   },
   searchInput: {
     paddingLeft: 5,
+
     color: '#000000',
     '& ::placeholder': {
       color: '#606060',

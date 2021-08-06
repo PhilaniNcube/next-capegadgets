@@ -23,17 +23,18 @@ import {
   ListItem,
   Divider,
   ListItemText,
-  InputBase,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import CancelIcon from '@material-ui/icons/Cancel';
-import SearchIcon from '@material-ui/icons/Search';
+
 import useStyles from '../utils/styles';
 import { Store } from '../utils/Store';
 import { Drawer } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import { getError } from '../utils/error';
 import axios from 'axios';
+import { AccountCircle } from '@material-ui/icons';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 export default function Layout({ title, description, children }) {
   const router = useRouter();
@@ -89,23 +90,6 @@ export default function Layout({ title, description, children }) {
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: 'error' });
     }
-  };
-
-  const [query, setQuery] = useState('');
-
-  const queryChangeHandler = (e) => {
-    setQuery(e.target.value);
-  };
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    if (router.pathname === '/ebooks') {
-      router.push(`/ebooks?title=${query}`);
-      return;
-    }
-
-    router.push(`/search?query=${query}`);
   };
 
   useEffect(() => {
@@ -212,24 +196,6 @@ export default function Layout({ title, description, children }) {
               </List>
             </Drawer>
 
-            <div className={`${classes.searchSection} ${classes.mt1}`}>
-              <form onSubmit={submitHandler} className={classes.searchForm}>
-                <InputBase
-                  name="query"
-                  placeholder="Search"
-                  onChange={queryChangeHandler}
-                  className={classes.searchInput}
-                />
-                <IconButton
-                  className={classes.iconButton}
-                  type="submit"
-                  aria-label="search"
-                >
-                  <SearchIcon />
-                </IconButton>
-              </form>
-            </div>
-
             <div>
               <NextLink href="/cart" passHref>
                 <Link>
@@ -239,10 +205,10 @@ export default function Layout({ title, description, children }) {
                       size="large"
                       badgeContent={cart.cartItems.length}
                     >
-                      Cart
+                      <ShoppingCartIcon />
                     </Badge>
                   ) : (
-                    'Cart'
+                    <ShoppingCartIcon />
                   )}
                 </Link>
               </NextLink>
@@ -255,7 +221,7 @@ export default function Layout({ title, description, children }) {
                     onClick={loginClickHandler}
                     className={classes.navbarButton}
                   >
-                    {userInfo.firstName}
+                    <AccountCircle />
                   </Button>
                   <Menu
                     id="simple-menu"

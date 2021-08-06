@@ -23,6 +23,7 @@ import db from '../../utils/db';
 import Ebook from '../../models/Ebook';
 
 import { Pagination } from '@material-ui/lab';
+import SearchForm from '../../components/SearchForm';
 
 // eslint-disable-next-line no-unused-vars
 const prices = [
@@ -114,6 +115,7 @@ export default function Home(props) {
         color="secondary"
       >
         Ebooks
+        <SearchForm placeholder="Ebook title" />
       </Typography>
       <Grid container spacing={2} className={classes.mt1}>
         <Grid item md={2}>

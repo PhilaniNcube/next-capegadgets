@@ -144,7 +144,7 @@ const Search = (props) => {
   return (
     <Layout title="Search">
       <Grid container className={classes.mt1} spacing={1}>
-        <Grid item md={4}>
+        <Grid item xs={10} md={4}>
           <List>
             <ListItem>
               <Box className={classes.fullWidth}>
