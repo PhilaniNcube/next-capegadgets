@@ -180,7 +180,9 @@ const ProductPage = (props) => {
             </ListItem>
             <ListItem>
               <Typography variant="h2" className={classes.price}>
-                R{(ebook.variants[0].prices[3].value * 18).toFixed(2)}
+                {ebook.variants[0].prices[3]
+                  ? `R ${(ebook.variants[0].prices[3].value * 18).toFixed(2)}`
+                  : ''}
               </Typography>
             </ListItem>
             <ListItem>
