@@ -26,7 +26,7 @@ handler.put(async (req, res) => {
                 <p>Hello ${user.firstName}</p>
                 <p>We have received a request to reset your password. If you did not request this please contact us immediately on sales@capegadgets.co.za</p>
                 <p>To reset your password, please follow the link below</p>
-                <a rel="stylesheet" href="http://localhost:3000/reset-password?token=${user.resetToken}">Reset Password</a>
+                <a rel="stylesheet" href="${process.env.URI}/?token=${user.resetToken}">Reset Password</a>
             </div>`,
   };
   sgMail
