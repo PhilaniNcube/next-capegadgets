@@ -151,7 +151,9 @@ export default function Home(props) {
                             ? `R ${(
                                 product.variants[0].prices[3].value * 18
                               ).toFixed(2)}`
-                            : ''}
+                            : `R ${(
+                                product.variants[0].prices[2].value * 22
+                              ).toFixed(2)}`}
                         </strong>
                       </Typography>
                     </CardContent>

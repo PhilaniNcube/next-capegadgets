@@ -70,11 +70,7 @@ const ProductPage = (props) => {
           <title>{ebook.title} | Cape Gadgets</title>
           <meta
             name="Description"
-            CONTENT={`Author: ${
-              ebook.contributors[0].name
-            }, Category: eBooks, Price: R ${(
-              ebook.variants[0].prices[3].value * 18
-            ).toFixed(2)}`}
+            CONTENT={`Author: ${ebook.contributors[0].name}, Category: eBooks`}
           ></meta>
           <meta
             name="keywords"
@@ -182,7 +178,7 @@ const ProductPage = (props) => {
               <Typography variant="h2" className={classes.price}>
                 {ebook.variants[0].prices[3]
                   ? `R ${(ebook.variants[0].prices[3].value * 18).toFixed(2)}`
-                  : ''}
+                  : `R ${(ebook.variants[0].prices[2].value * 22).toFixed(2)}`}
               </Typography>
             </ListItem>
             <ListItem>
