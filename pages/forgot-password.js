@@ -25,7 +25,7 @@ const ResetPassword = () => {
     formState: { errors },
   } = useForm();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const { state, dispatch } = useContext(Store);
+  const { state } = useContext(Store);
   const { userInfo } = state;
 
   const router = useRouter();
@@ -34,6 +34,8 @@ const ResetPassword = () => {
   if (userInfo) {
     router.push('/');
   }
+
+  console.log(Cookies);
 
   const classes = useStyles();
 
@@ -44,9 +46,8 @@ const ResetPassword = () => {
         email,
       });
 
-      dispatch({ type: 'USER_LOGIN', payload: data });
+      console.log(data);
 
-      Cookies.set('userInfo', data);
       router.push(redirect || '/');
     } catch (error) {
       console.log(error.message);
