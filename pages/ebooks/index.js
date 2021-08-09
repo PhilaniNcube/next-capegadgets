@@ -64,31 +64,21 @@ export default function Home(props) {
   const classes = useStyles();
 
   // eslint-disable-next-line no-unused-vars
-  const { query = 'all', price = 'all' } = router.query;
+  const { query = 'all' } = router.query;
 
   // const { state, dispatch } = useContext(Store);
 
-  const filterSearch = ({
-    page,
-
-    searchQuery,
-    price,
-  }) => {
+  const filterSearch = ({ page, searchQuery }) => {
     const path = router.pathname;
     const { query } = router;
 
     if (page) query.page = page;
     if (searchQuery) query.searchQuery = searchQuery;
 
-    if (price) query.price = price;
-
     router.push({ pathname: path, query: query });
   };
 
   // eslint-disable-next-line no-unused-vars
-  const priceHandler = (e) => {
-    filterSearch({ price: e.target.value });
-  };
 
   const pageHandler = (e, page) => {
     filterSearch({ page });
@@ -157,10 +147,11 @@ export default function Home(props) {
                       </Typography>
                       <Typography>
                         <strong>
-                          R
-                          {(product.variants[0].prices[3].value * 18).toFixed(
-                            2,
-                          )}
+                          {product.variants[0].prices[3]
+                            ? `R ${(
+                                product.variants[0].prices[3].value * 18
+                              ).toFixed(2)}`
+                            : ''}
                         </strong>
                       </Typography>
                     </CardContent>
@@ -194,10 +185,9 @@ export default function Home(props) {
 // eslint-disable-next-line no-unused-vars
 export async function getServerSideProps({ query }) {
   console.log(query);
-  const pageSize = query.pageSize || 48;
+  const pageSize = query.pageSize || 30;
   const page = query.page || 1;
   const searchQuery = query.title || '';
-  const price = query.price || '';
 
   const queryFilter =
     searchQuery && searchQuery !== 'all'
@@ -209,22 +199,11 @@ export async function getServerSideProps({ query }) {
         }
       : {};
 
-  const priceFilter =
-    price && price !== 'all'
-      ? {
-          price: {
-            $gte: Number(price.split('-')[0]),
-            $lte: Number(price.split('-')[1]),
-          },
-        }
-      : {};
-
   await db.connect();
 
   const ebookDocs = await Ebook.find(
     {
       ...queryFilter,
-      ...priceFilter,
     },
     '-created',
   )
@@ -234,7 +213,6 @@ export async function getServerSideProps({ query }) {
 
   const countEbooks = await Ebook.countDocuments({
     ...queryFilter,
-    ...priceFilter,
   });
 
   await db.disconnect();

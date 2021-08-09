@@ -18,7 +18,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import { getError } from '../utils/error';
 
-const LoginPage = () => {
+const ResetPassword = () => {
   const {
     handleSubmit,
     control,
@@ -37,12 +37,11 @@ const LoginPage = () => {
 
   const classes = useStyles();
 
-  const submitHandler = async ({ email, password }) => {
+  const submitHandler = async ({ email }) => {
     closeSnackbar();
     try {
-      const { data } = await axios.post('/api/users/login', {
+      const { data } = await axios.put('/api/users/forgot-password', {
         email,
-        password,
       });
 
       dispatch({ type: 'USER_LOGIN', payload: data });
@@ -56,10 +55,10 @@ const LoginPage = () => {
   };
 
   return (
-    <Layout title="Login">
+    <Layout title="Forgot Password">
       <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
         <Typography variant="h1" component="h1">
-          Login
+          Forgot Password
         </Typography>
         <List>
           <ListItem>
@@ -91,35 +90,7 @@ const LoginPage = () => {
               )}
             ></Controller>
           </ListItem>
-          <ListItem>
-            <Controller
-              name="password"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-                minLength: 6,
-              }}
-              render={({ field }) => (
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  id="password"
-                  label="Password"
-                  inputProps={{ type: 'password' }}
-                  error={Boolean(errors.password)}
-                  helperText={
-                    errors.password
-                      ? errors.password.type === 'minLength'
-                        ? 'Password should be more than 5 characters long'
-                        : 'Password is required'
-                      : ''
-                  }
-                  {...field}
-                ></TextField>
-              )}
-            ></Controller>
-          </ListItem>
+
           <ListItem>
             <Button
               variant="contained"
@@ -127,7 +98,7 @@ const LoginPage = () => {
               fullWidth
               color="secondary"
             >
-              Login
+              Forgot Password
             </Button>
           </ListItem>
           <ListItem>
@@ -136,15 +107,10 @@ const LoginPage = () => {
               <Link> Register</Link>
             </NextLink>
           </ListItem>
-          <ListItem>
-            <NextLink href={`/forgot-password`} passHref>
-              <Link>Forgot Password</Link>
-            </NextLink>
-          </ListItem>
         </List>
       </form>
     </Layout>
   );
 };
 
-export default LoginPage;
+export default ResetPassword;

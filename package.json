@@ -13,6 +13,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@paypal/react-paypal-js": "^7.2.0",
+    "@sendgrid/mail": "^7.4.5",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "chart.js": "^3.5.0",
@@ -31,7 +32,8 @@
     "react-hook-form": "^7.11.1",
     "react-icons": "^4.2.0",
     "react-material-ui-carousel": "^2.2.7",
-    "streamifier": "^0.1.1"
+    "streamifier": "^0.1.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "7.30.0",

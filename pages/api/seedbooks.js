@@ -23,7 +23,7 @@ handler.get(async (req, res) => {
 
     let i = 1;
 
-    while (i < 45) {
+    while (i < 775) {
       const response = await fetch(
         `https://api.vitalsource.com/v4/products?page=${i}&include_details=subjects,metadata,identifiers`,
         requestOptions,
