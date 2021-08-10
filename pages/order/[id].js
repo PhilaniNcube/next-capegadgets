@@ -162,13 +162,14 @@ const OrderPage = ({ params }) => {
 
   console.log(order);
   const tokenRequest = async () => {
+    
     if (order._id) {
       const response = await axios.post(
         `/api/orders/${order._id}/token`,
         {
           username: 'capegadgets',
           password: '9d059e3fb4efe73760d5ecee6909c2d2',
-          cardNumber: '6374374100353717',
+          cardNumber: cardNumber,
           terminalId: '94DVA001',
           amount: order.totalPrice,
           redirectSuccess: `http://localhost:3000/order/${order._id}?payment=success`,
