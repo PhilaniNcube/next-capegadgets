@@ -185,7 +185,7 @@ const OrderPage = ({ params }) => {
       console.log(response);
       localStorage.setItem('intelliToken', response.data.token);
 
-      window.location.href = `https://test.intellimali.co.za/web/payment?paymentToken=${response.data.token}`;
+      window.location.href = `https://portal.intellimali.co.za/web/payment?paymentToken=${response.data.token}`;
     }
   };
   // eslint-disable-next-line no-unused-vars
