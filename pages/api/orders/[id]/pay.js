@@ -14,7 +14,7 @@ handler.put(async (req, res) => {
     const order = await Order.findById(req.query.id);
 
     const intelliConfirmation = await axios.post(
-      `https://test.intellimali.co.za/web/payment`,
+      `https://portal.intellimali.co.za/web/payment`,
       {
         username: 'capegadgets',
         password: '9d059e3fb4efe73760d5ecee6909c2d2',
