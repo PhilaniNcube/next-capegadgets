@@ -29,6 +29,7 @@ handler.put(async (req, res) => {
     );
 
     console.log(intelliConfirmation);
+    const {traId} = response.data
 
     if (order) {
       order.isPaid = true;
