@@ -104,6 +104,7 @@ const OrderPage = ({ params }) => {
             },
           },
         );
+        console.log(paymentRes)
         enqueueSnackbar('Payment Successful', { variant: 'success' });
       };
       paymentResponse();
