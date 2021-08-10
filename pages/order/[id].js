@@ -110,7 +110,7 @@ const OrderPage = ({ params }) => {
       paymentResponse();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order.totalPrice, router.query.payment, userInfo.token]);
+  }, [ router.query]);
 
   const {
     shippingAddress,
