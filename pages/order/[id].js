@@ -258,7 +258,7 @@ const OrderPage = ({ params }) => {
   const data = {
     PAYGATE_ID: '10011072130',
     REFERENCE: order._id,
-    AMOUNT: order.totalPrice.toFixed(0) * 100,
+    AMOUNT: order.totalPrice * 100,
     CURRENCY: 'ZAR',
     RETURN_URL: `${process.env.URI}/order/${order._id}?cardPayment=result`,
     TRANSACTION_DATE: Date.now(),
