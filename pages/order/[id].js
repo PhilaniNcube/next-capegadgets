@@ -81,7 +81,7 @@ const OrderPage = ({ params }) => {
   ] = useReducer(reducer, { loading: true, order: {}, error: '' });
 
   useEffect(() => {
-    if (router.query.payment === 'success' && order._id) {
+    if (router.query.payment === 'success' ) {
       const paymentResponse = async () => {
         const token = localStorage.getItem('intelliToken');
         const card = localStorage.getItem('cardNumber');
@@ -104,7 +104,7 @@ const OrderPage = ({ params }) => {
             },
           },
         );
-        console.log(paymentRes);
+        enqueueSnackbar('Payment Successful', { variant: 'success' });
       };
       paymentResponse();
     }
