@@ -14,7 +14,7 @@ handler.put(async (req, res) => {
     const order = await Order.findById(req.query.id);
 
     const intelliConfirmation = await axios.post(
-      `https://test.intellimali.co.za/web/payment`,
+      `https://portal.intellimali.co.za/web/payment`,
       {
         username: 'capegadgets',
         password: '9d059e3fb4efe73760d5ecee6909c2d2',
@@ -29,10 +29,12 @@ handler.put(async (req, res) => {
     );
 
     console.log(intelliConfirmation);
+    const {traId} = intelliConfirmation.data
 
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
+      order.paymentResult.traId = traId
       // order.paymentResult = {
       //   id: req.body.id,
       //   status: req.body.status,
@@ -40,7 +42,7 @@ handler.put(async (req, res) => {
       // };
       const paidOrder = await order.save();
       await db.disconnect();
-      res.send({ message: 'Order Paid', order: paidOrder });
+      res.send({ message: 'Order Paid', order });
     } else {
       await db.disconnect();
       res.status(404).send({ message: 'Order not found' });

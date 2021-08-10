@@ -82,7 +82,7 @@ const OrderPage = ({ params }) => {
   ] = useReducer(reducer, { loading: true, order: {}, error: '' });
 
   useEffect(() => {
-    if (router.query.payment === 'success' && order._id) {
+    if (router.query.payment === 'success' ) {
       const paymentResponse = async () => {
         const token = localStorage.getItem('intelliToken');
         const card = localStorage.getItem('cardNumber');
@@ -105,12 +105,13 @@ const OrderPage = ({ params }) => {
             },
           },
         );
-        console.log(paymentRes);
+        console.log(paymentRes)
+        enqueueSnackbar('Payment Successful', { variant: 'success' });
       };
       paymentResponse();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order.totalPrice, router.query.payment, userInfo.token]);
+  }, [ router.query]);
 
   const {
     shippingAddress,
@@ -163,13 +164,14 @@ const OrderPage = ({ params }) => {
 
   console.log(order);
   const tokenRequest = async () => {
+    
     if (order._id) {
       const response = await axios.post(
         `/api/orders/${order._id}/token`,
         {
           username: 'capegadgets',
           password: '9d059e3fb4efe73760d5ecee6909c2d2',
-          cardNumber: '6374374100353717',
+          cardNumber: cardNumber,
           terminalId: '94DVA001',
           amount: order.totalPrice,
           redirectSuccess: `http://localhost:3000/order/${order._id}?payment=success`,
@@ -186,7 +188,7 @@ const OrderPage = ({ params }) => {
       console.log(response);
       localStorage.setItem('intelliToken', response.data.token);
 
-      window.location.href = `https://test.intellimali.co.za/web/payment?paymentToken=${response.data.token}`;
+      window.location.href = `https://portal.intellimali.co.za/web/payment?paymentToken=${response.data.token}`;
     }
   };
   // eslint-disable-next-line no-unused-vars
