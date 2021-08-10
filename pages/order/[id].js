@@ -82,7 +82,7 @@ const OrderPage = ({ params }) => {
   ] = useReducer(reducer, { loading: true, order: {}, error: '' });
 
   useEffect(() => {
-    if (router.query.payment === 'success' ) {
+    if (router.query.payment === 'success') {
       const paymentResponse = async () => {
         const token = localStorage.getItem('intelliToken');
         const card = localStorage.getItem('cardNumber');
@@ -105,13 +105,13 @@ const OrderPage = ({ params }) => {
             },
           },
         );
-        console.log(paymentRes)
+        console.log(paymentRes);
         enqueueSnackbar('Payment Successful', { variant: 'success' });
       };
       paymentResponse();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ router.query]);
+  }, [router.query]);
 
   const {
     shippingAddress,
@@ -164,7 +164,6 @@ const OrderPage = ({ params }) => {
 
   console.log(order);
   const tokenRequest = async () => {
-    
     if (order._id) {
       const response = await axios.post(
         `/api/orders/${order._id}/token`,
@@ -269,7 +268,9 @@ const OrderPage = ({ params }) => {
     KEY: 'vbkvbkbbjenlbnlnbklnblknb',
   };
 
-  const checksum = hash(data, { algorithm: 'md5' });
+  const checkString = `${data.PAYGATE_ID}${data.REFERENCE}${data.AMOUNT}${data.CURRENCY}${data.RETURN_URL}${data.TRANSACTION_DATE}${data.LOCALE}${data.COUNTRY}${data.EMAIL}${data.KEY}`;
+
+  const checksum = hash(checkString, { algorithm: 'md5' });
   console.log(checksum);
 
   const handleCardSubmit = async (e) => {
