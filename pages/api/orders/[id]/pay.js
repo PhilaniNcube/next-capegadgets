@@ -34,6 +34,7 @@ handler.put(async (req, res) => {
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
+      order.paymentResult = traId
       // order.paymentResult = {
       //   id: req.body.id,
       //   status: req.body.status,
@@ -41,7 +42,7 @@ handler.put(async (req, res) => {
       // };
       const paidOrder = await order.save();
       await db.disconnect();
-      res.send({ message: 'Order Paid', order: paidOrder });
+      res.send({ message: 'Order Paid', order });
     } else {
       await db.disconnect();
       res.status(404).send({ message: 'Order not found' });
