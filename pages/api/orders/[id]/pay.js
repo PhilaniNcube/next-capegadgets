@@ -34,7 +34,7 @@ handler.put(async (req, res) => {
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
-      order.paymentResult = traId
+      order.paymentResult.traId = traId
       // order.paymentResult = {
       //   id: req.body.id,
       //   status: req.body.status,
