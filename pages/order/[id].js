@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import Layout from '../../components/Layout';
+import hash from 'object-hash';
 import {
   Button,
   Card,
@@ -253,6 +254,44 @@ const OrderPage = ({ params }) => {
     tokenRequest();
   };
 
+  const data = {
+    PAYGATE_ID: '10011072130',
+    REFERENCE: order._id,
+    AMOUNT: order.totalPrice.toFixed(0) * 100,
+    CURRENCY: 'ZAR',
+    RETURN_URL: `${process.env.URI}/order/${order._id}?cardPayment=result`,
+    TRANSACTION_DATE: Date.now(),
+    LOCALE: 'en-ZA',
+    COUNTRY: 'ZA',
+    EMAIL: userInfo.email,
+    KEY: 'vbkvbkbbjenlbnlnbklnblknb',
+  };
+
+  const checksum = hash(data, { algorithm: 'md5' });
+  console.log(checksum);
+
+  const handleCardSubmit = async (e) => {
+    e.preventDefault();
+
+    const response = await axios.post(
+      `https://secure.paygate.co.za/payweb3/initiate.trans`,
+      {
+        PAYGATE_ID: '10011072130',
+        REFERENCE: order._id,
+        AMOUNT: order.totalPrice.toFixed(0) * 100,
+        CURRENCY: 'ZAR',
+        RETURN_URL: `${process.env.URI}/order/${order._id}?cardPayment=result`,
+        TRANSACTION_DATE: Date.now(),
+        LOCALE: 'en-ZA',
+        COUNTRY: 'ZA',
+        EMAIL: userInfo.email,
+        CHECKSUM: checksum,
+      },
+    );
+
+    console.log(response);
+  };
+
   return (
     <Layout title={`Order ${orderId}`}>
       <Typography component="h1" variant="h1">
@@ -433,6 +472,22 @@ const OrderPage = ({ params }) => {
                       >
                         {' '}
                         Pay With Intellimali{' '}
+                      </Button>
+                    </form>
+                  </ListItem>
+                )}
+                {!isPaid && paymentMethod === 'Card' && (
+                  <ListItem>
+                    <form onSubmit={handleCardSubmit}>
+                      <Button
+                        className={classes.mt1}
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        type="submit"
+                      >
+                        {' '}
+                        Pay With Card{' '}
                       </Button>
                     </form>
                   </ListItem>

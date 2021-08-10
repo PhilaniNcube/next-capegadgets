@@ -73,8 +73,8 @@ const PaymentPage = () => {
                   control={<Radio />}
                 ></FormControlLabel>
                 <FormControlLabel
-                  label="Debit/Credit Card/EFT"
-                  value="Debit/Credit Card/EFT"
+                  label="Card"
+                  value="Card"
                   control={<Radio />}
                 ></FormControlLabel>
               </RadioGroup>
