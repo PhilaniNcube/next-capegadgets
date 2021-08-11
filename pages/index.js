@@ -14,7 +14,6 @@ import Carousel from 'react-material-ui-carousel';
 import useStyles from '../utils/styles';
 import Image from 'next/image';
 
-
 export default function Home(props) {
   const classes = useStyles();
   const { topRatedProducts, featuredProducts } = props;
@@ -22,6 +21,23 @@ export default function Home(props) {
   const router = useRouter();
 
   const addToCartHandler = async (product) => {
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+      event: 'add_to_cart',
+      ecommerce: {
+        items: [
+          {
+            item_name: product.name, // Name or ID is required.
+            item_id: product._id,
+            price: product.price,
+            item_brand: product.brand,
+            item_category: product.category,
+            quantity: 1,
+          },
+        ],
+      },
+    });
+
     const existingItem = state.cart.cartItems.find(
       (item) => item._id === product._id,
     );
@@ -37,7 +53,10 @@ export default function Home(props) {
   };
 
   return (
-    <Layout title="Home" description="For all your learning & technology items. Avalable for purchase on intellimali. With the widest range of university and professional ebooks. Over 700 000 ebook titles.">
+    <Layout
+      title="Home"
+      description="For all your learning & technology items. Avalable for purchase on intellimali. With the widest range of university and professional ebooks. Over 700 000 ebook titles."
+    >
       <Carousel className={classes.mt1} animation="slide">
         {featuredProducts.map((product) => {
           return (
