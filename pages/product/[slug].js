@@ -43,6 +43,26 @@ const ProductPage = (props) => {
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+      event: 'view_item',
+      ecommerce: {
+        items: [
+          {
+            item_name: product.name, // Name or ID is required.
+            item_id: product._id,
+            price: product.price,
+            item_brand: product.brand,
+            item_category: product.category,
+            quantity: 1,
+          },
+        ],
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const fetchReviews = async () => {
     try {
       const { data } = await axios.get(`/api/products/${product._id}/reviews`);
@@ -63,6 +83,23 @@ const ProductPage = (props) => {
   }
 
   const addToCartHandler = async () => {
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+      event: 'add_to_cart',
+      ecommerce: {
+        items: [
+          {
+            item_name: product.name, // Name or ID is required.
+            item_id: product._id,
+            price: product.price,
+            item_brand: product.brand,
+            item_category: product.category,
+            quantity: 1,
+          },
+        ],
+      },
+    });
+
     const existingItem = state.cart.cartItems.find(
       (item) => item._id === product._id,
     );
