@@ -29,12 +29,12 @@ handler.put(async (req, res) => {
     );
 
     console.log(intelliConfirmation);
-    const {traId} = intelliConfirmation.data
+    const { traId } = intelliConfirmation.data;
 
     if (order) {
       order.isPaid = true;
       order.paidAt = Date.now();
-      order.paymentResult.traId = traId
+      order.paymentResult.traId = traId;
       // order.paymentResult = {
       //   id: req.body.id,
       //   status: req.body.status,
@@ -42,12 +42,11 @@ handler.put(async (req, res) => {
       // };
       const paidOrder = await order.save();
       await db.disconnect();
-      res.send({ message: 'Order Paid', order });
+      res.send({ message: 'Order Paid', paidOrder });
     } else {
       await db.disconnect();
       res.status(404).send({ message: 'Order not found' });
     }
-    res.send(order);
   } catch (error) {
     console.log(error);
   }

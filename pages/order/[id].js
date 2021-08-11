@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import Layout from '../../components/Layout';
-import hash from 'object-hash';
+import * as CryptoJS from 'crypto-js';
 import {
   Button,
   Card,
@@ -124,6 +124,7 @@ const OrderPage = ({ params }) => {
     isPaid,
     shippedAt,
     paidAt,
+    _id,
   } = order;
 
   useEffect(() => {
@@ -255,44 +256,69 @@ const OrderPage = ({ params }) => {
     tokenRequest();
   };
 
+  const tempDay = new Date();
+
+  const day = tempDay.toUTCString();
+  console.log(day);
+  console.log(day);
+
   const data = {
     PAYGATE_ID: '10011072130',
-    REFERENCE: order._id,
-    AMOUNT: order.totalPrice * 100,
+    REFERENCE: _id,
+    AMOUNT: totalPrice * 100,
     CURRENCY: 'ZAR',
-    RETURN_URL: `${process.env.URI}/order/${order._id}?cardPayment=result`,
-    TRANSACTION_DATE: Date.now(),
-    LOCALE: 'en-ZA',
-    COUNTRY: 'ZA',
+    RETURN_URL: `https://capegadgets.vercel.app/order/${_id}?cardPayment=result`,
+    TRANSACTION_DATE: day,
+    LOCALE: 'en-za',
+    COUNTRY: 'ZAF',
     EMAIL: userInfo.email,
-    KEY: 'vbkvbkbbjenlbnlnbklnblknb',
+    KEY: 'secret',
   };
 
+  // eslint-disable-next-line no-unused-vars
   const checkString = `${data.PAYGATE_ID}${data.REFERENCE}${data.AMOUNT}${data.CURRENCY}${data.RETURN_URL}${data.TRANSACTION_DATE}${data.LOCALE}${data.COUNTRY}${data.EMAIL}${data.KEY}`;
 
-  const checksum = hash(checkString, { algorithm: 'md5' });
-  console.log(checksum);
+  const checksum = CryptoJS.MD5(checkString);
+  console.log(checksum.toString());
+  console.log(checksum.toString());
 
   const handleCardSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await axios.post(
-      `https://secure.paygate.co.za/payweb3/initiate.trans`,
-      {
-        PAYGATE_ID: '10011072130',
-        REFERENCE: order._id,
-        AMOUNT: order.totalPrice.toFixed(0) * 100,
-        CURRENCY: 'ZAR',
-        RETURN_URL: `${process.env.URI}/order/${order._id}?cardPayment=result`,
-        TRANSACTION_DATE: Date.now(),
-        LOCALE: 'en-ZA',
-        COUNTRY: 'ZA',
-        EMAIL: userInfo.email,
-        CHECKSUM: checksum,
-      },
-    );
+    const formdata = new FormData();
 
-    console.log(response);
+    formdata.append('PAYGATE_ID', '10011072130');
+    formdata.append('REFERENCE', `${_id}`);
+    formdata.append('AMOUNT', `${totalPrice * 100}`);
+    formdata.append('CURRENCY', 'ZAR');
+    formdata.append(
+      'RETURN_URL',
+      `https://capegadgets.vercel.app/order/${_id}?cardPayment=result`,
+    );
+    formdata.append('TRANSACTION_DATE', day);
+    formdata.append('LOCALE', 'en-za');
+    formdata.append('COUNTRY', 'ZAF');
+    formdata.append('EMAIL', userInfo.email);
+    formdata.append('CHECKSUM', checksum.toString());
+
+    const requestOptions = {
+      method: 'POST',
+      body: formdata,
+      redirect: 'follow',
+    };
+
+    const payRes = fetch(
+      'https://secure.paygate.co.za/payweb3/initiate.trans',
+      requestOptions,
+    )
+      .then((response) => response.text())
+      .then((result) => {
+        const arr = result.split('&');
+        console.log(arr);
+      })
+      .catch((error) => console.log('error', error));
+
+    console.log(payRes);
   };
 
   return (
