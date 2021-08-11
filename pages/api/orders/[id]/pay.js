@@ -8,33 +8,35 @@ import axios from 'axios';
 const handler = nc({ onError });
 handler.use(isAuth);
 handler.put(async (req, res) => {
-  const { token, card } = req.body;
+  console.log(req.body);
+  const { token, card, id, totalPrice } = req.body;
   try {
+    console.log('paying');
     await db.connect();
-    const order = await Order.findById(req.query.id);
-
-    const intelliConfirmation = await axios.post(
-      `https://portal.intellimali.co.za/web/payment`,
-      {
-        username: 'capegadgets',
-        password: '9d059e3fb4efe73760d5ecee6909c2d2',
-        cardNumber: card,
-        terminalId: '94DVA001',
-        amount: order.totalPrice,
-        redirectSuccess: `${process.env.REDIRECT_URL}/order/${order._id}?payment=success`,
-        redirectCancel: `${process.env.REDIRECT_URL}/order/${order._id}?payment=cancel`,
-        reference: order._id,
-        token: token,
-      },
-    );
-
-    console.log(intelliConfirmation);
-    const { traId } = intelliConfirmation.data;
+    const order = await Order.findById(id);
+    console.log(order);
 
     if (order) {
+      const intelliConfirmation = await axios.post(
+        `https://portal.intellimali.co.za/web/payment`,
+        {
+          username: 'capegadgets',
+          password: '9d059e3fb4efe73760d5ecee6909c2d2',
+          cardNumber: card,
+          terminalId: '94DVA001',
+          amount: totalPrice,
+          redirectSuccess: `http://localhost:3000/order/${id}?payment=success`,
+          redirectCancel: `http://localhost:3000/order/${id}?payment=cancel`,
+          reference: id,
+          token: token,
+        },
+      );
+
+      console.log(intelliConfirmation);
+
       order.isPaid = true;
       order.paidAt = Date.now();
-      order.paymentResult.traId = traId;
+
       // order.paymentResult = {
       //   id: req.body.id,
       //   status: req.body.status,

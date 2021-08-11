@@ -83,6 +83,7 @@ const OrderPage = ({ params }) => {
 
   useEffect(() => {
     if (router.query.payment === 'success') {
+      console.log('commence paying');
       const paymentResponse = async () => {
         const token = localStorage.getItem('intelliToken');
         const card = localStorage.getItem('cardNumber');
@@ -106,6 +107,7 @@ const OrderPage = ({ params }) => {
           },
         );
         console.log(paymentRes);
+        dispatch({ type: 'PAY_SUCCESS', payload: paymentRes });
         enqueueSnackbar('Payment Successful', { variant: 'success' });
       };
       paymentResponse();
@@ -201,6 +203,8 @@ const OrderPage = ({ params }) => {
         `/api/orders/${order._id}/pay`,
         {
           token: token,
+          id: order._id,
+          totalPrice: order.totalPrice,
         },
         {
           headers: {
