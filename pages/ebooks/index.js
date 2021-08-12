@@ -191,7 +191,7 @@ export default function Home(props) {
 // eslint-disable-next-line no-unused-vars
 export async function getServerSideProps({ query }) {
   console.log(query);
-  const pageSize = query.pageSize || 30;
+  const pageSize = query.pageSize || 20;
   const page = query.page || 1;
   const searchQuery = query.title || '';
 
