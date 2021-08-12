@@ -210,10 +210,10 @@ export async function getServerSideProps({ query }) {
   const ebookDocs = await Ebook.find(
     {
       $or: [ 
-{title: { $regex: searchQuery, $options: 'i', }}, 
-{identifiers.e_isbn: { $regex: searchQuery, $options: 'i', }}, 
-{contributors[0].name: { $regex: searchQuery, $options: 'i', }}, 
- {vbid: { $regex: searchQuery, $options: 'i', }} 
+{title: { $regex: searchQuery, $options: 'i' }}, 
+{identifiers.e_isbn: { $regex: searchQuery, $options: 'i' }}, 
+{contributors[0].name: { $regex: searchQuery, $options: 'i' }}, 
+ {vbid: { $regex: searchQuery, $options: 'i'}} 
 ] 
     },
     '-created',
