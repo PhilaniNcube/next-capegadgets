@@ -210,7 +210,8 @@ export async function getServerSideProps({ query }) {
           identifiers.eisbn_canonical: {
             $regex: searchQuery,
             $options: 'i',
-          }]
+          }
+          ]
         }
       : {};
 
