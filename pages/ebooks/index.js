@@ -198,10 +198,19 @@ export async function getServerSideProps({ query }) {
   const queryFilter =
     searchQuery && searchQuery !== 'all'
       ? {
+          $or: [
           title: {
             $regex: searchQuery,
             $options: 'i',
           },
+          vbid: {
+            $regex: searchQuery,
+            $options: 'i',
+          },
+          identifiers.eisbn_canonical: {
+            $regex: searchQuery,
+            $options: 'i',
+          }]
         }
       : {};
 
