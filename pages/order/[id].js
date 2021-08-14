@@ -82,7 +82,7 @@ const OrderPage = ({ params }) => {
   ] = useReducer(reducer, { loading: true, order: {}, error: '' });
 
   useEffect(() => {
-    if (router.query.payment === 'success' && orderId) {
+    if (router.query.payment === 'success' && !order.isPaid) {
       console.log('commence paying');
       const paymentResponse = async () => {
         const token = localStorage.getItem('intelliToken');

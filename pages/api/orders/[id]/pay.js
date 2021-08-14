@@ -18,7 +18,7 @@ handler.put(async (req, res) => {
 
     if (order) {
       const intelliConfirmation = await axios.post(
-        `https://portal.intellimali.co.za/web/payment?paymentToken=${req.body.token}`,
+        `https://portal.intellimali.co.za/web`,
         {
           username: 'capegadgets',
           password: '9d059e3fb4efe73760d5ecee6909c2d2',
