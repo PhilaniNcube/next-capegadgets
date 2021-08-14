@@ -43,26 +43,6 @@ const ProductPage = (props) => {
   const [rating, setRating] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    window.dataLayer.push({ ecommerce: null });
-    window.dataLayer.push({
-      event: 'view_item',
-      ecommerce: {
-        items: [
-          {
-            item_name: product.name, // Name or ID is required.
-            item_id: product._id,
-            price: product.price,
-            item_brand: product.brand,
-            item_category: product.category,
-            quantity: 1,
-          },
-        ],
-      },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const fetchReviews = async () => {
     try {
       const { data } = await axios.get(`/api/products/${product._id}/reviews`);
@@ -332,8 +312,19 @@ const ProductPage = (props) => {
 
 export default ProductPage;
 
-export async function getServerSideProps(context) {
-  const { params } = context;
+export async function getStaticPaths() {
+  await db.connect();
+  const products = await Product.find({}, '-reviews').lean();
+  await db.disconnect();
+
+  const paths = products.map((product) => ({
+    params: { slug: product.slug },
+  }));
+
+  return { paths, fallback: false };
+}
+
+export async function getStaticProps({ params }) {
   const { slug } = params;
   await db.connect();
   const product = await Product.findOne({ slug }, '-reviews').lean();
