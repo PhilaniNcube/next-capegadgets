@@ -201,19 +201,8 @@ const ProductPage = (props) => {
 
 export default ProductPage;
 
-export async function getStaticPaths() {
-  await db.connect();
-  const ebooks = await Ebook.find({}, '-created').lean();
-  await db.disconnect();
-
-  const paths = ebooks.map((ebook) => ({
-    params: { vbid: ebook.vbid },
-  }));
-
-  return { paths, fallback: false };
-}
-
-export async function getStaticProps({ params }) {
+export async function getServerSideProps(context) {
+  const { params } = context;
   const { vbid } = params;
   await db.connect();
   const ebook = await Ebook.findOne({ vbid }, '-created').lean();
