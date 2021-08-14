@@ -82,22 +82,21 @@ const OrderPage = ({ params }) => {
   ] = useReducer(reducer, { loading: true, order: {}, error: '' });
 
   useEffect(() => {
-    if (router.query.payment === 'success') {
+    if (router.query.payment === 'success' && orderId) {
       console.log('commence paying');
       const paymentResponse = async () => {
         const token = localStorage.getItem('intelliToken');
         const card = localStorage.getItem('cardNumber');
         const paymentRes = await axios.put(
-          `/api/orders/${order._id}/pay`,
+          `/api/orders/${orderId}/pay`,
           {
             username: 'capegadgets',
             password: '9d059e3fb4efe73760d5ecee6909c2d2',
             cardNumber: card,
             terminalId: '94DVA001',
-            amount: order.totalPrice,
-            redirectSuccess: `${process.env.REDIRECT_URL}/order/${order._id}?payment=success`,
-            redirectCancel: `${process.env.REDIRECT_URL}/order/${order._id}?payment=cancel`,
-            reference: order._id,
+            redirectSuccess: `https://capegadgets.vercel.app/order/${orderId}?payment=success`,
+            redirectCancel: `https://capegadgets.vercel.app/${orderId}?payment=cancel`,
+            reference: orderId,
             token: token,
           },
           {
@@ -113,7 +112,7 @@ const OrderPage = ({ params }) => {
       paymentResponse();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.query]);
+  }, []);
 
   const {
     shippingAddress,
@@ -176,8 +175,8 @@ const OrderPage = ({ params }) => {
           cardNumber: cardNumber,
           terminalId: '94DVA001',
           amount: order.totalPrice,
-          redirectSuccess: `http://localhost:3000/order/${order._id}?payment=success`,
-          redirectCancel: `http://localhost:3000/order/${order._id}?payment=cancel`,
+          redirectSuccess: `https://capegadgets.vercel.app/order/${order._id}?payment=success`,
+          redirectCancel: `https://capegadgets.vercel.app/${order._id}?payment=cancel`,
           reference: order._id,
         },
         {

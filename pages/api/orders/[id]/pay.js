@@ -9,22 +9,22 @@ const handler = nc({ onError });
 handler.use(isAuth);
 handler.put(async (req, res) => {
   console.log(req.body);
-  const { token, card, id, totalPrice } = req.body;
+  const { token, card, id } = req.body;
   try {
     console.log('paying');
     await db.connect();
-    const order = await Order.findById(id);
+    const order = await Order.findById(req.body.reference);
     console.log(order);
 
     if (order) {
       const intelliConfirmation = await axios.post(
-        `https://portal.intellimali.co.za/web/payment`,
+        `https://portal.intellimali.co.za/web/payment?paymentToken=${req.body.token}`,
         {
           username: 'capegadgets',
           password: '9d059e3fb4efe73760d5ecee6909c2d2',
           cardNumber: card,
           terminalId: '94DVA001',
-          amount: totalPrice,
+          amount: order.totalPrice,
           redirectSuccess: `https://capegadgets.vercel.app/order/${id}?payment=success`,
           redirectCancel: `https://capegadgets.vercel.app/order/${id}?payment=cancel`,
           reference: id,
@@ -32,7 +32,7 @@ handler.put(async (req, res) => {
         },
       );
 
-      console.log(intelliConfirmation);
+      console.log(intelliConfirmation.data);
 
       order.isPaid = true;
       order.paidAt = Date.now();
@@ -50,7 +50,7 @@ handler.put(async (req, res) => {
       res.status(404).send({ message: 'Order not found' });
     }
   } catch (error) {
-    console.log(error);
+    console.log(onError(error));
   }
 });
 
