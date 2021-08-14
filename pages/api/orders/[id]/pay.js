@@ -32,7 +32,7 @@ handler.put(async (req, res) => {
         },
       );
 
-      console.log(intelliConfirmation.data);
+      console.log(intelliConfirmation);
 
       order.isPaid = true;
       order.paidAt = Date.now();
