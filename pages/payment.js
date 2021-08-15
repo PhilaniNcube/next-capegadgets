@@ -72,11 +72,6 @@ const PaymentPage = () => {
                   value="Intellimali"
                   control={<Radio />}
                 ></FormControlLabel>
-                <FormControlLabel
-                  label="Card"
-                  value="Card"
-                  control={<Radio />}
-                ></FormControlLabel>
               </RadioGroup>
             </FormControl>
           </ListItem>

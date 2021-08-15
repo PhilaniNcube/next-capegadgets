@@ -267,10 +267,10 @@ const OrderPage = ({ params }) => {
 
   const data = {
     PAYGATE_ID: '10011072130',
-    REFERENCE: _id,
+    REFERENCE: orderId,
     AMOUNT: totalPrice * 100,
     CURRENCY: 'ZAR',
-    RETURN_URL: `https://capegadgets.vercel.app/order/${_id}?cardPayment=result`,
+    RETURN_URL: `https://capegadgets.vercel.app/order/${orderId}?cardPayment=result`,
     TRANSACTION_DATE: day,
     LOCALE: 'en-za',
     COUNTRY: 'ZAF',
@@ -296,7 +296,7 @@ const OrderPage = ({ params }) => {
     formdata.append('CURRENCY', 'ZAR');
     formdata.append(
       'RETURN_URL',
-      `https://capegadgets.vercel.app/order/${_id}?cardPayment=result`,
+      `https://capegadgets.vercel.app/order/${orderId}?cardPayment=result`,
     );
     formdata.append('TRANSACTION_DATE', day);
     formdata.append('LOCALE', 'en-za');
@@ -310,7 +310,7 @@ const OrderPage = ({ params }) => {
       redirect: 'follow',
     };
 
-    const payRes = fetch(
+    const payRes = await fetch(
       'https://secure.paygate.co.za/payweb3/initiate.trans',
       requestOptions,
     )
@@ -318,10 +318,39 @@ const OrderPage = ({ params }) => {
       .then((result) => {
         const arr = result.split('&');
         console.log(arr);
+
+        return arr;
       })
       .catch((error) => console.log('error', error));
 
     console.log(payRes);
+
+    const payReqId = payRes[1].split('=')[1];
+    const newChecksum = payRes[3].split('=')[1];
+
+    console.log({ payReqId, newChecksum });
+
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+
+    const newFormData = new FormData();
+    newFormData.append('PAYGATE_ID', '10011072130');
+    newFormData.append('PAY_REQUEST_ID', payReqId);
+    newFormData.append('REFERENCE', orderId);
+    newFormData.append('CHECKSUM', newChecksum);
+
+    // eslint-disable-next-line no-unused-vars
+    const newRequestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: newFormData,
+      redirect: 'follow',
+    };
+
+    window.location.replace(
+      'https://secure.paygate.co.za/payweb3/process.trans',
+      newRequestOptions,
+    );
   };
 
   return (
