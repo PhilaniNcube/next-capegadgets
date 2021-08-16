@@ -209,15 +209,19 @@ export async function getServerSideProps({ query }) {
 
   const ebookDocs = await Ebook.find(
   {
+   [
+  {
     $search: {
       index: 'books',
       text: {
-        query: 'black',
+        query: searchQuery,
         path: {
           wildcard: '*'
         }
       }
     }
+  }
+]
   },
     '-created',
   )
