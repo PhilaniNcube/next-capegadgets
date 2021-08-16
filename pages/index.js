@@ -78,6 +78,7 @@ export default function Home(props) {
                 variant="contained"
                 className={classes.mt1}
                 color="secondary"
+onClick={router.push(`/product/${product.slug}`)}
               >
                 Shop Now
               </Button>
@@ -103,7 +104,7 @@ export default function Home(props) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   await db.connect();
   const topRatedProducts = await Product.find({}, '-reviews')
     .lean()
