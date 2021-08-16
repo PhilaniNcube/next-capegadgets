@@ -212,7 +212,7 @@ export async function getServerSideProps({ query }) {
   $or: [ 
 {title: { $regex: searchQuery, $options: 'i', }}, 
  {vbid: { $regex: searchQuery, $options: 'i', }} 
-] , index: 'books'
+] 
   },
     '-created',
     
