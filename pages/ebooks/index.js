@@ -58,8 +58,10 @@ const prices = [
 ];
 
 export default function Home(props) {
-  const { ebooks, countEbooks, pages } = props;
+  const { ebooks, countEbooks, pages, subjects } = props;
   const router = useRouter();
+  
+  console.log(subjects.length);
 
   const classes = useStyles();
 
@@ -222,6 +224,7 @@ export async function getServerSideProps({ query }) {
     .lean();
     
     
+const subjects = await Ebook.find().distinct('subjects[0].name');
 
 
   const countEbooks = await Ebook.countDocuments({
@@ -235,6 +238,7 @@ export async function getServerSideProps({ query }) {
   return {
     props: {
       ebooks,
+      subjects,
       countEbooks,
       page,
       pages: Math.ceil(countEbooks / pageSize),
