@@ -78,7 +78,7 @@ export default function Home(props) {
                 variant="contained"
                 className={classes.mt1}
                 color="secondary"
-onClick={router.push(`/product/${product.slug}`)}
+                
               >
                 Shop Now
               </Button>
