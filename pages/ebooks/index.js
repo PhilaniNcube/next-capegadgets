@@ -215,7 +215,7 @@ export async function getServerSideProps({ query }) {
 ] 
   },
     '-created',
-    index: 'books'
+    index: books
   )
     .skip(pageSize * (page - 1))
     .limit(pageSize)
