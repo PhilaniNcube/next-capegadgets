@@ -60,8 +60,6 @@ const prices = [
 export default function Home(props) {
   const { ebooks, countEbooks, pages } = props;
   const router = useRouter();
-  
-  
 
   const classes = useStyles();
 
@@ -193,7 +191,7 @@ export default function Home(props) {
 // eslint-disable-next-line no-unused-vars
 export async function getServerSideProps({ query }) {
   console.log(query);
-  const pageSize = query.pageSize || 20;
+  const pageSize = 20;
   const page = query.page || 1;
   const searchQuery = query.title || '';
 
@@ -210,21 +208,17 @@ export async function getServerSideProps({ query }) {
   await db.connect();
 
   const ebookDocs = await Ebook.find(
-  {
-  $or: [ 
-{title: { $regex: searchQuery, $options: 'i', }}, 
- {vbid: { $regex: searchQuery, $options: 'i', }} 
-] 
-  },
+    {
+      $or: [
+        { title: { $regex: searchQuery, $options: 'i' } },
+        { vbid: { $regex: searchQuery, $options: 'i' } },
+      ],
+    },
     '-created',
-    
   )
     .skip(pageSize * (page - 1))
     .limit(pageSize)
     .lean();
-    
-    
-
 
   const countEbooks = await Ebook.countDocuments({
     ...queryFilter,

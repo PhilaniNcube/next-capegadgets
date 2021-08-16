@@ -6,7 +6,6 @@ const ebookSchema = new mongoose.Schema(
     contributors: { type: Array },
     copy_restrictions: { type: Number },
     copyright_date: { type: String },
-    created: { type: Date },
     description: { type: String },
     edition: { type: Number },
     exclude_sales_rights: { type: Array },
