@@ -208,9 +208,12 @@ export async function getServerSideProps({ query }) {
   await db.connect();
 
   const ebookDocs = await Ebook.find(
-    {
-    ...queryFilter
-    },
+   { 
+$or: [ 
+{title: { $regex: searchQuery, $options: 'i', }}, 
+ {vbid: { $regex: searchQuery, $options: 'i', }} 
+] 
+},
     '-created',
   )
     .skip(pageSize * (page - 1))
