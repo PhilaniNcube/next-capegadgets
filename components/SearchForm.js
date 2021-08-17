@@ -10,6 +10,8 @@ const SearchForm = () => {
   const router = useRouter();
   const [query, setQuery] = useState('');
 
+  console.log(router.pathname);
+
   const queryChangeHandler = (e) => {
     setQuery(e.target.value);
   };
@@ -17,11 +19,14 @@ const SearchForm = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    if (router.pathname === '/ebooks') {
-      router.push(`/ebooks?title=${query}`);
+    if (
+      router.pathname === '/ebooks' ||
+      router.pathname === '/ebooks/search-books' ||
+      router.pathname === '/ebooks/books'
+    ) {
+      router.push(`/ebooks/search-books?title=${query}`);
       return;
     }
-
     router.push(`/search?query=${query}`);
   };
 

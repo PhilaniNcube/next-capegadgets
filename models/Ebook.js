@@ -27,7 +27,7 @@ const ebookSchema = new mongoose.Schema(
     sort_title: { type: String },
     subjects: { type: Array },
     subtitle: { type: String },
-    title: { type: String },
+    title: { type: String, index: true },
     variants: { type: Array },
     vbid: { type: String },
   },

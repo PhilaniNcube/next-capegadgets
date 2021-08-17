@@ -70,7 +70,7 @@ const ProductPage = (props) => {
           <title>{ebook.title} | Cape Gadgets</title>
           <meta
             name="Description"
-            CONTENT={`Author: ${ebook.contributors[0].name}, Category: eBooks`}
+            content={`Author: ${ebook.contributors[0].name}, Category: eBooks`}
           ></meta>
           <meta
             name="keywords"

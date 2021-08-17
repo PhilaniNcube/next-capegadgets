@@ -1,6 +1,3 @@
-// import { useContext } from 'react';
-// import axios from 'axios';
-import { useRouter } from 'next/router';
 import {
   Box,
   Button,
@@ -13,26 +10,40 @@ import {
   ListItem,
   Typography,
 } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
+import Head from 'next/head';
 import Image from 'next/image';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
 import Layout from '../../components/Layout';
-// import { Store } from '../../utils/Store';
-import useStyles from '../../utils/styles';
-import Head from 'next/head';
-import db from '../../utils/db';
-import Ebook from '../../models/Ebook';
-
 import SearchForm from '../../components/SearchForm';
+import { connectToDatabase } from '../../utils/mongodb';
+import useStyles from '../../utils/styles';
 
-export default function Home(props) {
-  const { ebooks } = props;
+const Books = ({ ebooks, pages }) => {
+  console.log(ebooks);
+
   const router = useRouter();
+  const { query = 'all' } = router.query;
 
   const classes = useStyles();
 
-  console.log(ebooks);
+  const filterSearch = ({ page, searchQuery }) => {
+    const path = router.pathname;
+    const { query } = router;
 
-  // const { state, dispatch } = useContext(Store);
+    if (page) query.page = page;
+    if (searchQuery) query.searchQuery = searchQuery;
+
+    router.push({ pathname: path, query: query });
+  };
+
+  // eslint-disable-next-line no-unused-vars
+
+  const pageHandler = (e, page) => {
+    filterSearch({ page });
+  };
 
   return (
     <Layout
@@ -53,7 +64,7 @@ export default function Home(props) {
         </Typography>
         <Typography component="p" className={classes.subtitle}>
           With one of the largest catalogues of prescribed university ebooks
-          anywhere. Over 700 000 ebooks available
+          anywhere. Over 750 000 ebooks available
         </Typography>
         <SearchForm placeholder="Ebook title" />
       </Box>
@@ -75,7 +86,7 @@ export default function Home(props) {
                     <NextLink href={`/ebooks/${product.vbid}`} passHref>
                       <CardActionArea>
                         <Image
-                          src={product.resource_links.cover_image}
+                          src={product.image}
                           alt={product.title}
                           width={480}
                           height={697}
@@ -89,22 +100,10 @@ export default function Home(props) {
                         </Typography>
                       </NextLink>
                       <Typography className={classes.author}>
-                        Author: {product.contributors[0].name}
+                        Author: {product.author}
                       </Typography>
                       <Typography>
-                        <strong>
-                          {product.variants[0].prices[3]
-                            ? `R ${(
-                                product.variants[0].prices[3].value * 18
-                              ).toFixed(2)}`
-                            : product.variants[0].prices[2]
-                            ? `R ${(
-                                product.variants[0].prices[2].value * 22
-                              ).toFixed(2)}`
-                            : `R ${(
-                                product.variants[0].prices[1].value * 22
-                              ).toFixed(2)}`}
-                        </strong>
+                        <strong>R{product.price}</strong>
                       </Typography>
                     </CardContent>
                     <CardActions>
@@ -125,27 +124,51 @@ export default function Home(props) {
           </Grid>
         </Grid>
       </Grid>
+      <Pagination
+        defaultPage={parseInt(query.page || '1')}
+        count={pages}
+        onChange={pageHandler}
+      ></Pagination>
     </Layout>
   );
-}
+};
+
+export default Books;
 
 // eslint-disable-next-line no-unused-vars
-export async function getStaticProps() {
-  await db.connect();
+export async function getServerSideProps({ query }) {
+  console.log(query);
+  const pageSize = 20;
+  const page = query.page || 1;
+  //   const searchQuery = query.title || 'all';
 
-  const ebooksDocs = await Ebook.find({}, '-created')
-    .limit(30)
-    .lean();
+  const { db } = await connectToDatabase();
 
-  const ebooks = ebooksDocs.map(db.convertDocToObj);
+  const data = await db
+    .collection('ebooks')
+    .find()
+    .skip(pageSize * (page - 1))
+    .limit(pageSize)
+    .toArray();
 
-  await db.disconnect();
-
-  // console.log(ebooks);
+  const ebooks = data.map((ebook) => {
+    return {
+      title: ebook.title,
+      image: ebook.resource_links.cover_image,
+      author: ebook.contributors[0].name,
+      publisher: ebook.publisher,
+      price:
+        ebook.variants[0].prices[3].value ||
+        ebook.variants[0].prices[2].value ||
+        ebook.variants[0].prices[1].value,
+      vbid: ebook.vbid,
+    };
+  });
 
   return {
     props: {
       ebooks,
+      pages: Math.ceil(774000 / pageSize),
     },
   };
 }
