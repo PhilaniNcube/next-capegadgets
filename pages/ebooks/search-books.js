@@ -140,7 +140,7 @@ export default Books;
 // eslint-disable-next-line no-unused-vars
 export async function getServerSideProps({ query }) {
   console.log(query);
-  const pageSize = 40;
+  const pageSize = 80;
   const page = query.page || 1;
   const searchQuery = query.title || 'all';
 
@@ -156,10 +156,22 @@ export async function getServerSideProps({ query }) {
           index: 'default',
           text: {
             query: searchQuery,
-            path: ['title', 'vbid'],
-            fuzzy: {
-              maxEdits: 1,
+            path: {
+              wildcard: '*',
             },
+          },
+        },
+      },
+      {
+        $project: {
+          title: 1,
+          vbid: 1,
+          contributors: 1,
+          publisher: 1,
+          variants: 1,
+          resource_links: 1,
+          score: {
+            $meta: 'searchHighlights',
           },
         },
       },
