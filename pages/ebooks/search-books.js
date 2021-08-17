@@ -140,7 +140,7 @@ export default Books;
 // eslint-disable-next-line no-unused-vars
 export async function getServerSideProps({ query }) {
   console.log(query);
-  const pageSize = 40;
+  const pageSize = 120;
   const page = query.page || 1;
   const searchQuery = query.title || 'all';
 
