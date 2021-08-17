@@ -70,8 +70,8 @@ export default function Home(props) {
             >
               <Image
                 src={product.image}
-                width={500}
-                height={500}
+                width={400}
+                height={400}
                 alt={product.name}
               />
               <Typography>{product.name}</Typography>

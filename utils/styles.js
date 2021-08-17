@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
   navbar: {
     backgroundColor: '#efefef',
     '& a': {
-      color: '#208080',
+      color: '#01295F',
       marginLeft: 10,
       fontWeight: 'bold',
     },
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     fontWeight: 700,
     fontSize: '1.8rem',
-    color: '#208080',
+    color: '#01295F',
   },
   footer: {
     textAlign: 'center',
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   navbarButton: {
-    color: '#208080',
+    color: '#01295F',
     textTransform: 'initial',
   },
   transparentBackground: {
@@ -113,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 5,
   },
   author: {
-    color: '#208080',
+    color: '#01295F',
   },
   carousel: {
     display: 'grid',

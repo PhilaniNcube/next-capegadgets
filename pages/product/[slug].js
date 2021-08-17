@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import {
-  Card,
   Button,
   Grid,
   Link,
@@ -12,6 +11,7 @@ import {
   Typography,
   TextField,
   CircularProgress,
+  Chip,
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import axios from 'axios';
@@ -55,6 +55,24 @@ const ProductPage = (props) => {
 
   useEffect(() => {
     fetchReviews();
+    console.log(window);
+    window.dataLayer = [];
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+      event: 'view_item',
+      ecommerce: {
+        items: [
+          {
+            item_name: product.name, // Name or ID is required.
+            item_id: product._id,
+            price: product.price,
+            item_brand: product.brand,
+            item_category: product.category,
+            quantity: 1,
+          },
+        ],
+      },
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -157,7 +175,7 @@ const ProductPage = (props) => {
           <Link>Back To Products</Link>
         </NextLink>
       </div>
-      <Grid container spacing={1}>
+      <Grid container spacing={2}>
         <Grid item md={6} xs={12}>
           <Image
             src={product.image}
@@ -167,7 +185,7 @@ const ProductPage = (props) => {
             layout="responsive"
           />
         </Grid>
-        <Grid item md={3} xs={12}>
+        <Grid item md={6} xs={12}>
           <List>
             <ListItem>
               <Typography component="h1" variant="h1">
@@ -189,45 +207,30 @@ const ProductPage = (props) => {
             <ListItem>
               <Typography>Description: {product.description}</Typography>
             </ListItem>
+            <ListItem>
+              <Typography variant="h2" component="h2">
+                R{product.price}
+              </Typography>
+            </ListItem>
+            <ListItem>
+              <Chip
+                label={product.countInStock ? 'In Stock' : 'Unavailable'}
+                clickable
+                color="secondary"
+                variant="outlined"
+              />
+            </ListItem>
+            <ListItem>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={addToCartHandler}
+              >
+                Add To Cart
+              </Button>
+            </ListItem>
           </List>
-        </Grid>
-        <Grid item md={3} xs={12}>
-          <Card>
-            <List>
-              <ListItem>
-                <Grid container>
-                  <Grid item xs={6}>
-                    <Typography>Price</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography>R{product.price}</Typography>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Grid container>
-                  <Grid item xs={6}>
-                    <Typography>Status</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography>
-                      {product.countInStock ? 'In Stock' : 'Unavailable'}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </ListItem>
-              <ListItem>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={addToCartHandler}
-                >
-                  Add To Cart
-                </Button>
-              </ListItem>
-            </List>
-          </Card>
         </Grid>
       </Grid>
       <List>

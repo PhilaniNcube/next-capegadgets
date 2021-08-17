@@ -65,7 +65,7 @@ export default function Layout({ title, description, children }) {
         main: '#f0c000',
       },
       secondary: {
-        main: '#208080',
+        main: '#01295F',
       },
     },
   });
