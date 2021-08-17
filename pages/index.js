@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Button, Grid, Typography } from '@material-ui/core';
+import Link from 'next/link';
 
 import db from '../utils/db';
 import Product from '../models/Product';
@@ -74,14 +75,15 @@ export default function Home(props) {
                 alt={product.name}
               />
               <Typography>{product.name}</Typography>
-              <Button
-                variant="contained"
-                className={classes.mt1}
-                color="secondary"
-                
-              >
-                Shop Now
-              </Button>
+              <Link passHref href={`/product/${product.slug}`}>
+                <Button
+                  variant="contained"
+                  className={classes.mt1}
+                  color="secondary"
+                >
+                  Shop Now
+                </Button>
+              </Link>
             </Grid>
           );
         })}
