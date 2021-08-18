@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Image from 'next/image';
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -21,6 +21,30 @@ import Ebook from '../../models/Ebook';
 import db from '../../utils/db';
 
 const ProductPage = (props) => {
+  useEffect(() => {
+    window.dataLayer = [];
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+      event: 'view_item',
+      ecommerce: {
+        items: [
+          {
+            item_name: ebook.title, // Name or ID is required.
+            item_id: ebook.vbid,
+            price:
+              (ebook.variants[0].prices[3].value * 18).toFixed(2) ||
+              (ebook.variants[0].prices[2].value * 22).toFixed(2) ||
+              (ebook.variants[0].prices[1].value * 22).toFixed(2),
+            item_brand: ebook.publisher,
+            item_category: 'ebooks',
+            quantity: 1,
+          },
+        ],
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const router = useRouter();
   // eslint-disable-next-line no-unused-vars
   const { state, dispatch } = useContext(Store);
