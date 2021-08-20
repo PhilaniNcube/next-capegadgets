@@ -104,6 +104,12 @@ const Books = ({ ebooks, pages, searchQuery }) => {
                       <Typography className={classes.author}>
                         Author: {product.author}
                       </Typography>
+                        <Typography className={classes.author}>
+                        Edition: {product.edition}
+                      </Typography>
+                        <Typography className={classes.author}>
+                        Publication Date: {product.publication_date}
+                      </Typography>
                       <Typography>
                         <strong>R{(product.price * 18).toFixed(2)}</strong>
                       </Typography>
@@ -188,6 +194,8 @@ export async function getServerSideProps({ query }) {
       image: ebook.resource_links.cover_image,
       author: ebook.contributors[0].name,
       publisher: ebook.publisher,
+      publication_date:ebook.publication_date,
+      edition:ebook.edition,
       price:
         ebook?.variants[0].prices[3]?.value ||
         ebook?.variants[0].prices[2]?.value ||
