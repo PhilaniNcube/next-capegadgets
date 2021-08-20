@@ -176,6 +176,8 @@ export async function getServerSideProps({ query }) {
           publisher: 1,
           variants: 1,
           resource_links: 1,
+          publication_date: 1,
+          edition:1,
           score: {
             $meta: 'searchHighlights',
           },
