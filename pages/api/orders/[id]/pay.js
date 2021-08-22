@@ -53,19 +53,21 @@ handler.put(async (req, res) => {
       const msg = {
         to: user.email, // Change to your recipient
         from: 'sales@capegadgets.co.za', // Change to your verified sender
+        cc: 'philani@diversivest.co.za',
         subject: 'Order Confirmation For Cape Gadgets', // Change to your
-        text: `Hi ${user.firstName}, your order has benn confirmed, you can view your order at the following link https://capegadgets.vercel.app/order/${order._id} `,
+        text: `Hi ${user.firstName}, your order has been confirmed, you can view your order at the following link https://capegadgets.vercel.app/order/${order._id} `,
         html: `
             <div>
+            <img src="https://capegadgets.vercel.app/_next/image?url=%2Fimages%2Flogo.png&w=256&q=150" />
                 <h1>Cape Gadgets Order Confirmation</h1>
                 <h2>Order Number ${order._id}</h2>
                 <p>Hello ${user.firstName}</p>
-                <p>your order has benn confirmed, you can view your order at the following link https://capegadgets.vercel.app/order/${order._id}</p>
-                <p>To reset your password, please follow the link below</p>
+                <p>your order has been confirmed, you can view your order at the following link https://capegadgets.vercel.app/order/${order._id}</p>
+                <hr />
                 <ul style="list-style-type: none;">
                 <li>Sub Total: R ${order.itemsPrice}</li>
                 <li>Shipping Price: ${order.shippingPrice}</li>
-                <li><strong>Shipping Price: ${order.totalPrice}</strong></li>
+                <li style="font-size: 2rem;"><strong>Total Price: ${order.totalPrice}</strong></li>
                 </ul>
 
                 <p>If your have any questions about your order please contact us on 073 206 2822 or email us on sales@capegadgets.co.za</p>
