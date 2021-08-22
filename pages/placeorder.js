@@ -113,7 +113,8 @@ const PlaceOrderPage = () => {
                 {shippingAddress.firstName} {shippingAddress.lastName},{' '}
                 {shippingAddress.address}, {shippingAddress.city},{' '}
                 {shippingAddress.province}, {shippingAddress.country},{' '}
-                {shippingAddress.postalCode}, {shippingAddress.university}
+                {shippingAddress.postalCode}, {shippingAddress.university},
+                {shippingAddress.mobileNumber}
               </ListItem>
             </List>
           </Card>

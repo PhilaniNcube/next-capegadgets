@@ -379,7 +379,7 @@ const OrderPage = ({ params }) => {
                   {shippingAddress.lastName}, {shippingAddress.address},
                   {shippingAddress.city}, {shippingAddress.province},
                   {shippingAddress.country}, {shippingAddress.postalCode},
-                  {shippingAddress.university}
+                  {shippingAddress.university}, {shippingAddress.mobileNumber}
                 </ListItem>
                 <ListItem>
                   Status:{' '}

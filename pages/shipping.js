@@ -45,6 +45,7 @@ const ShippingPage = () => {
     setValue('postalCode', shippingAddress.postalCode);
     setValue('university', shippingAddress.university);
     setValue('country', shippingAddress.country);
+    setValue('mobileNumber', shippingAddress.mobileNumber);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,6 +90,7 @@ const ShippingPage = () => {
     postalCode,
     country,
     university,
+    mobileNumber,
   }) => {
     dispatch({
       type: 'SAVE_SHIPPING_ADDRESS',
@@ -101,6 +103,7 @@ const ShippingPage = () => {
         province,
         country,
         university,
+        mobileNumber,
       },
     });
 
@@ -113,6 +116,7 @@ const ShippingPage = () => {
       country,
       province,
       university,
+      mobileNumber,
     });
     router.push('/payment');
   };
@@ -319,6 +323,35 @@ const ShippingPage = () => {
                     errors.country
                       ? errors.country.type === 'minLength'
                         ? 'Country length should be more than 2 characters'
+                        : 'Country is required'
+                      : ''
+                  }
+                  {...field}
+                ></TextField>
+              )}
+            ></Controller>
+          </ListItem>
+
+          <ListItem>
+            <Controller
+              name="mobileNumber"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: true,
+                minLength: 10,
+              }}
+              render={({ field }) => (
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  id="mobileNumber"
+                  label="Mobile Number"
+                  error={Boolean(errors.mobileNumber)}
+                  helperText={
+                    errors.mobileNumber
+                      ? errors.mobileNumber.type === 'minLength'
+                        ? 'Please Check your mobile number is the correct length'
                         : 'Country is required'
                       : ''
                   }

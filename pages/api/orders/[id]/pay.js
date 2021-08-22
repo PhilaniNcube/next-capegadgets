@@ -1,9 +1,11 @@
 import nc from 'next-connect';
 import Order from '../../../../models/Order';
+import User from '../../../../models/User';
 import db from '../../../../utils/db';
 import { isAuth } from '../../../../utils/auth';
 import { onError } from '../../../../utils/error';
 import axios from 'axios';
+import sgMail from '@sendgrid/mail';
 
 const handler = nc({ onError });
 handler.use(isAuth);
@@ -14,6 +16,7 @@ handler.put(async (req, res) => {
     console.log('paying');
     await db.connect();
     const order = await Order.findById(req.body.reference);
+    const user = await User.findById(order.user);
     console.log(order);
 
     if (order) {
@@ -44,6 +47,39 @@ handler.put(async (req, res) => {
       // };
       const paidOrder = await order.save();
       await db.disconnect();
+
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+      const msg = {
+        to: user.email, // Change to your recipient
+        from: 'sales@capegadgets.co.za', // Change to your verified sender
+        subject: 'Order Confirmation For Cape Gadgets', // Change to your
+        text: `Hi ${user.firstName}, your order has benn confirmed, you can view your order at the following link https://capegadgets.vercel.app/order/${order._id} `,
+        html: `
+            <div>
+                <h1>Cape Gadgets Order Confirmation</h1>
+                <h2>Order Number ${order._id}</h2>
+                <p>Hello ${user.firstName}</p>
+                <p>your order has benn confirmed, you can view your order at the following link https://capegadgets.vercel.app/order/${order._id}</p>
+                <p>To reset your password, please follow the link below</p>
+                <ul style="list-style-type: none;">
+                <li>Sub Total: R ${order.itemsPrice}</li>
+                <li>Shipping Price: ${order.shippingPrice}</li>
+                <li><strong>Shipping Price: ${order.totalPrice}</strong></li>
+                </ul>
+
+                <p>If your have any questions about your order please contact us on 073 206 2822 or email us on sales@capegadgets.co.za</p>
+            </div>`,
+      };
+      sgMail
+        .send(msg)
+        .then(() => {
+          console.log('Email Sent');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
       res.send({ message: 'Order Paid', paidOrder });
     } else {
       await db.disconnect();
