@@ -179,6 +179,28 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 'clamp(.8rem, 1.1776rem, 1.8rem)',
     lineHeight: '1.1',
   },
+  box: {
+    minHeight: '80vh',
+    width: '100%',
+    padding: 10,
+    marginBottom: 30,
+    marginTop: 30,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundImage: `linear-gradient(to bottom, rgba(45, 46, 52, 0.32), rgba(17, 29, 33, 0.44)),
+    url('/images/laptops.jpg')`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center center',
+    backgroundRepeat: 'no-repeat',
+  },
+  pageHeading: {
+    color: 'white',
+    fontWeight: 700,
+    fontSize: '10vw',
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+  },
 }));
 
 export default useStyles;
