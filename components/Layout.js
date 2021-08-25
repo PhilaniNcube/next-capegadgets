@@ -23,6 +23,7 @@ import {
   ListItem,
   Divider,
   ListItemText,
+  Grid,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -123,6 +124,10 @@ export default function Layout({ title, description, children }) {
     Cookies.remove('userInfo');
     router.push('/');
   };
+
+  let copyright_date = new Date();
+
+  let copyDate = copyright_date.getFullYear();
 
   return (
     <div>
@@ -270,7 +275,47 @@ export default function Layout({ title, description, children }) {
         </AppBar>
         <Container className={classes.main}>{children}</Container>
         <footer className={classes.footer}>
-          <Typography>All rights reserved. Cape Gadgets.</Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <List>
+                <ListItem>
+                  <NextLink href="/" passHref>
+                    <Link>Home</Link>
+                  </NextLink>
+                </ListItem>
+                <ListItem>
+                  <NextLink href="/search" passHref>
+                    <Link>Search</Link>
+                  </NextLink>
+                </ListItem>
+                <ListItem>
+                  <NextLink href="/ebooks" passHref>
+                    <Link>Ebooks</Link>
+                  </NextLink>
+                </ListItem>
+                <ListItem>
+                  <NextLink href="/terms" passHref>
+                    <Link>Terms & Conditions</Link>
+                  </NextLink>
+                </ListItem>
+              </List>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <List>
+                <ListItem className={classes.intelli}>
+                  <Box></Box>
+                </ListItem>
+                <ListItem className={classes.paygate}>
+                  <Box></Box>
+                </ListItem>
+              </List>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Typography className={classes.footerText}>
+              Cape Gadgets Learning & Lifestyle &#169; {copyDate}
+            </Typography>
+          </Grid>
         </footer>
       </ThemeProvider>
     </div>

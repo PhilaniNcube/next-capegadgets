@@ -39,9 +39,29 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1.8rem',
     color: '#01295F',
   },
+  intelli: {
+    backgroundImage: 'url(/images/intellimali.jpg)',
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'left',
+    height: '4rem',
+    marginBottom: '1rem',
+  },
+  paygate: {
+    backgroundImage: 'url(/images/paygate.jpg)',
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'left',
+    height: '4rem',
+  },
   footer: {
     textAlign: 'center',
     marginTop: '6rem',
+    padding: '3rem 1rem',
+    backgroundColor: '#01295F',
+  },
+  footerText: {
+    color: '#FFFFFF',
   },
   form: {
     width: '100%',
