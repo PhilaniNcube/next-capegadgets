@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import Script from 'next/script';
 import Image from 'next/image';
 import Head from 'next/head';
@@ -25,6 +26,8 @@ import { useRouter } from 'next/dist/client/router';
 import { useSnackbar } from 'notistack';
 import { getError } from '../../utils/error';
 import { useEffect } from 'react';
+import { Product as ProductSchema } from 'schema-dts';
+import { jsonLdScriptProps } from 'react-schemaorg';
 
 const ProductPage = (props) => {
   const router = useRouter();
@@ -170,26 +173,21 @@ const ProductPage = (props) => {
             content={`${product.description}`}
           />
           <meta property="twitter:image" content={product.image}></meta>
-          <Script type="application/ld+json" strategy="beforeInteractive">
-            {JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Product',
-              aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingValue: product.rating,
-                reviewCount: product.numReviews,
-              },
-              description: product.description,
-              name: product.name,
-              image: product.image,
-              offers: {
-                '@type': 'Offer',
-                availability: 'https://schema.org/InStock',
-                price: product.price,
-                priceCurrency: 'ZAR',
-              },
-            })}
-          </Script>
+
+          <script
+            {...(jsonLdScriptProps <
+              ProductSchema >
+              {
+                '@context': 'https://schema.org/',
+                '@type': 'Product',
+                name: product.name,
+                aggregateRating: {
+                  '@type': 'AggregateRating',
+                  ratingValue: product.rating,
+                  reviewCount: product.numReviews,
+                },
+              })}
+          />
         </Head>
 
         <NextLink href="/" passHref>
