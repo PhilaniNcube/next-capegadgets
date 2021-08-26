@@ -114,10 +114,11 @@ const OrderPage = ({ params }) => {
       paymentResponse();
 
       const dataLayer = window.dataLayer;
-
+      console.log('the order');
       console.log(order);
 
       if (order) {
+        console.log('dataLayer');
         dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
         dataLayer.push({
           event: 'purchase',
