@@ -28,8 +28,8 @@ handler.put(async (req, res) => {
           cardNumber: card,
           terminalId: '94DVA001',
           amount: order.totalPrice,
-          redirectSuccess: `https://capegadgets.vercel.app/order/${id}?payment=success`,
-          redirectCancel: `https://capegadgets.vercel.app/order/${id}?payment=cancel`,
+          redirectSuccess: `https://capegadgets.co.za/order/${id}?payment=success`,
+          redirectCancel: `https://capegadgets.co.za/order/${id}?payment=cancel`,
           reference: id,
           token: token,
         },
@@ -62,7 +62,7 @@ handler.put(async (req, res) => {
                 <h1>Cape Gadgets Order Confirmation</h1>
                 <h2>Order Number ${order._id}</h2>
                 <p>Hello ${user.firstName}</p>
-                <p>your order has been confirmed, you can view your order at the following link https://capegadgets.vercel.app/order/${order._id}</p>
+                <p>your order has been confirmed, you can view your order at the following link https://capegadgets.co.za/order/${order._id}</p>
                 <hr />
                 <ul style="list-style-type: none;">
                 <li>Sub Total: R ${order.itemsPrice}</li>
