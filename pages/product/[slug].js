@@ -170,7 +170,7 @@ const ProductPage = (props) => {
             content={`${product.description}`}
           />
           <meta property="twitter:image" content={product.image}></meta>
-          <Script type="application/ld+json">
+          <Script type="application/ld+json" strategy="beforeInteractive">
             {JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'Product',
