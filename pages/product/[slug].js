@@ -149,6 +149,7 @@ const ProductPage = (props) => {
               __html: JSON.stringify({
                 '@context': 'http://schema.org',
                 '@type': 'Product',
+                sku: `${product.sku}`,
                 name: `${product.name}`,
                 image: `${product.image}`,
                 description: `${product.description}`,
@@ -158,12 +159,17 @@ const ProductPage = (props) => {
                 },
                 offers: {
                   '@type': 'Offer',
+                  itemCondition: 'https://schema.org/NewCondition',
+                  availability: 'https://schema.org/InStock',
+                  priceCurrency: `ZAR`,
                   price: `${product.price}`,
                 },
                 aggregateRating: {
                   '@type': 'AggregateRating',
                   ratingCount: `${product.numReviews}`,
                   ratingValue: `${product.rating}`,
+                  bestRating: '5',
+                  worstRating: '0',
                 },
               }),
             }}
