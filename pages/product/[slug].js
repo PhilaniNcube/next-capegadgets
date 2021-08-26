@@ -141,6 +141,33 @@ const ProductPage = (props) => {
     <Layout title={product.name} description={product.description}>
       <div className={classes.section}>
         <Head>
+          <Script
+            type="application/ld+json"
+            strategy="beforeInteractive"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                '@context': 'http://schema.org',
+                '@type': 'Product',
+                name: `${product.name}`,
+                image: `${product.image}`,
+                description: `${product.description}`,
+                brand: {
+                  '@type': 'Brand',
+                  name: `${product.brand}`,
+                },
+                offers: {
+                  '@type': 'Offer',
+                  price: `${product.price}`,
+                },
+                aggregateRating: {
+                  '@type': 'AggregateRating',
+                  ratingCount: `${product.numReviews}`,
+                  ratingValue: `${product.rating}`,
+                },
+              }),
+            }}
+          />
+
           <title>{product.name} | Cape Gadgets</title>
 
           <meta name="Description" content={product.description}></meta>
@@ -170,30 +197,6 @@ const ProductPage = (props) => {
             content={`${product.description}`}
           />
           <meta property="twitter:image" content={product.image}></meta>
-
-          <Script type="application/ld+json">
-            {JSON.stringify({
-              '@context': 'http://schema.org',
-              '@type': 'Product',
-              name: 'Volkano Impulse Bluetooth Headphones',
-              image:
-                'https://www.capegadgets.co.za/_next/image?url=%2Fimages%2FVB-VH100-BLK.png&w=3840&q=75',
-              description:
-                'Volkano Impulse Series Bluetooth Headphones - Black',
-              brand: {
-                '@type': 'Brand',
-                name: 'Volkano',
-              },
-              offers: {
-                '@type': 'Offer',
-                price: '319',
-              },
-              aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingCount: '8',
-              },
-            })}
-          </Script>
         </Head>
 
         <NextLink href="/" passHref>
