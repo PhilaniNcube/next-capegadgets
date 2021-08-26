@@ -109,46 +109,48 @@ const OrderPage = ({ params }) => {
         );
         console.log('hello', paymentRes);
 
+        const data = paymentRes.data.paidOrder;
+
+        const dataLayer = window.dataLayer;
+        console.log('the order');
+        console.log(data);
+
+        if (data) {
+          console.log('dataLayer');
+          dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+          dataLayer.push({
+            event: 'purchase',
+            ecommerce: {
+              transaction_id: data._id,
+              affiliation: 'Cape Gadgets',
+              value: data.itemsPrice,
+              tax: 0,
+              shipping: data.shippingPrice,
+              currency: 'ZAR',
+              coupon: '',
+              items: [
+                data.orderItems?.map((item) => {
+                  return {
+                    item_name: item.name,
+                    item_id: item._id,
+                    price: item.price,
+                    item_brand: item.brand,
+                    item_category: item.category,
+                    item_variant: '',
+                    quantity: item.quantity,
+                  };
+                }),
+              ],
+            },
+          });
+        }
+
+        console.log(dataLayer);
+
         dispatch({ type: 'PAY_SUCCESS', payload: paymentRes });
         enqueueSnackbar('Payment Successful', { variant: 'success' });
       };
       paymentResponse();
-
-      const dataLayer = window.dataLayer;
-      console.log('the order');
-      console.log(order);
-
-      if (order) {
-        console.log('dataLayer');
-        dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
-        dataLayer.push({
-          event: 'purchase',
-          ecommerce: {
-            transaction_id: order._id,
-            affiliation: 'Cape Gadgets',
-            value: order.itemsPrice,
-            tax: 0,
-            shipping: order.shippingPrice,
-            currency: 'ZAR',
-            coupon: '',
-            items: [
-              order.orderItems?.map((item) => {
-                return {
-                  item_name: item.name,
-                  item_id: item._id,
-                  price: item.price,
-                  item_brand: item.brand,
-                  item_category: item.category,
-                  item_variant: '',
-                  quantity: item.quantity,
-                };
-              }),
-            ],
-          },
-        });
-      }
-
-      console.log(dataLayer);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
