@@ -25,8 +25,6 @@ import { useRouter } from 'next/dist/client/router';
 import { useSnackbar } from 'notistack';
 import { getError } from '../../utils/error';
 import { useEffect } from 'react';
-import { Product as ProductSchema } from 'schema-dts';
-import { jsonLdScriptProps } from 'react-schemaorg';
 
 const ProductPage = (props) => {
   const router = useRouter();
@@ -173,20 +171,29 @@ const ProductPage = (props) => {
           />
           <meta property="twitter:image" content={product.image}></meta>
 
-          <Script
-            {...(jsonLdScriptProps <
-              ProductSchema >
-              {
-                '@context': 'https://schema.org/',
-                '@type': 'Product',
-                name: product.name,
-                aggregateRating: {
-                  '@type': 'AggregateRating',
-                  ratingValue: product.rating,
-                  reviewCount: product.numReviews,
-                },
-              })}
-          />
+          <Script type="application/ld+json">
+            {JSON.stringify({
+              '@context': 'http://schema.org',
+              '@type': 'Product',
+              name: 'Volkano Impulse Bluetooth Headphones',
+              image:
+                'https://www.capegadgets.co.za/_next/image?url=%2Fimages%2FVB-VH100-BLK.png&w=3840&q=75',
+              description:
+                'Volkano Impulse Series Bluetooth Headphones - Black',
+              brand: {
+                '@type': 'Brand',
+                name: 'Volkano',
+              },
+              offers: {
+                '@type': 'Offer',
+                price: '319',
+              },
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingCount: '8',
+              },
+            })}
+          </Script>
         </Head>
 
         <NextLink href="/" passHref>
