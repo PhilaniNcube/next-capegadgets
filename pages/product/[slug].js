@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-// eslint-disable-next-line no-unused-vars
 import Script from 'next/script';
 import Image from 'next/image';
 import Head from 'next/head';
@@ -174,7 +173,7 @@ const ProductPage = (props) => {
           />
           <meta property="twitter:image" content={product.image}></meta>
 
-          <script
+          <Script
             {...(jsonLdScriptProps <
               ProductSchema >
               {
