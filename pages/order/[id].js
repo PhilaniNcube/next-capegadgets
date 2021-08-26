@@ -81,6 +81,8 @@ const OrderPage = ({ params }) => {
     dispatch,
   ] = useReducer(reducer, { loading: true, order: {}, error: '' });
 
+  console.log(order);
+
   useEffect(() => {
     if (router.query.payment === 'success' && order.isPaid === false) {
       console.log('commence paying');
@@ -94,8 +96,8 @@ const OrderPage = ({ params }) => {
             password: '9d059e3fb4efe73760d5ecee6909c2d2',
             cardNumber: card,
             terminalId: '94DVA001',
-            redirectSuccess: `https://capegadgets.vercel.app/order/${orderId}?payment=success`,
-            redirectCancel: `https://capegadgets.vercel.app/${orderId}?payment=cancel`,
+            redirectSuccess: `https://capegadgets.co.za/order/${orderId}?payment=success`,
+            redirectCancel: `https://capegadgets.co.za/${orderId}?payment=cancel`,
             reference: orderId,
             token: token,
           },
@@ -110,6 +112,41 @@ const OrderPage = ({ params }) => {
         enqueueSnackbar('Payment Successful', { variant: 'success' });
       };
       paymentResponse();
+
+      const dataLayer = window.dataLayer;
+
+      console.log(order);
+
+      if (order) {
+        dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+        dataLayer.push({
+          event: 'purchase',
+          ecommerce: {
+            transaction_id: order._id,
+            affiliation: 'Cape Gadgets',
+            value: order.itemsPrice,
+            tax: 0,
+            shipping: order.shippingPrice,
+            currency: 'ZAR',
+            coupon: '',
+            items: [
+              order.orderItems.map((item) => {
+                return {
+                  item_name: item.name,
+                  item_id: item._id,
+                  price: item.price,
+                  item_brand: item.brand,
+                  item_category: item.category,
+                  item_variant: '',
+                  quantity: item.quantity,
+                };
+              }),
+            ],
+          },
+        });
+      }
+
+      console.log(dataLayer);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,6 +165,8 @@ const OrderPage = ({ params }) => {
     paidAt,
     _id,
   } = order;
+
+  console.log(window.dataLayer);
 
   useEffect(() => {
     if (!userInfo) {
@@ -176,8 +215,8 @@ const OrderPage = ({ params }) => {
           cardNumber: cardNumber,
           terminalId: '94DVA001',
           amount: order.totalPrice,
-          redirectSuccess: `https://capegadgets.vercel.app/order/${order._id}?payment=success`,
-          redirectCancel: `https://capegadgets.vercel.app/${order._id}?payment=cancel`,
+          redirectSuccess: `https://capegadgets.co.za/order/${order._id}?payment=success`,
+          redirectCancel: `https://capegadgets.co.za/${order._id}?payment=cancel`,
           reference: order._id,
         },
         {
