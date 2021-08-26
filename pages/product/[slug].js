@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+// eslint-disable-next-line no-unused-vars
 import Script from 'next/script';
 import Image from 'next/image';
 import Head from 'next/head';
@@ -141,7 +142,7 @@ const ProductPage = (props) => {
     <Layout title={product.name} description={product.description}>
       <div className={classes.section}>
         <Head>
-          <Script
+          <script
             type="application/ld+json"
             strategy="beforeInteractive"
             dangerouslySetInnerHTML={{
