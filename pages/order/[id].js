@@ -130,36 +130,6 @@ const OrderPage = ({ params }) => {
   } = order;
 
   useEffect(() => {
-    window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
-    window.dataLayer.push({
-      event: 'purchase',
-      ecommerce: {
-        transaction_id: _id,
-        affiliation: 'Cape Gadgets',
-        value: itemsPrice,
-        tax: 0,
-        shipping: shippingPrice,
-        currency: 'ZAR',
-        coupon: '',
-        items: [
-          orderItems.map((item) => {
-            return {
-              item_name: item.name,
-              item_id: item._id,
-              price: item.price,
-              item_brand: item.brand,
-              item_category: item.category,
-              item_variant: item.brand,
-              quantity: item.quantity,
-            };
-          }),
-        ],
-      },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPaid]);
-
-  useEffect(() => {
     if (!userInfo) {
       return router.push('/login');
     }
