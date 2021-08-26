@@ -111,6 +111,27 @@ const OrderPage = ({ params }) => {
       };
       paymentResponse();
     }
+    
+    
+    
+    window.dataLayer = [];
+    window.dataLayer.push({ ecommerce: null });
+    window.dataLayer.push({
+  event: "purchase",
+  ecommerce: {
+      transaction_id: orderId,
+      affiliation: "Cape Gadgets",
+      value: order.itemsPrice,
+      tax: 0,
+      shipping: order.shippingPrice,
+      currency: "ZAR",
+      coupon: "",
+      items: order.orderItems
+  }
+});
+
+    
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
