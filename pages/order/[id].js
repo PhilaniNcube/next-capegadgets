@@ -107,7 +107,8 @@ const OrderPage = ({ params }) => {
             },
           },
         );
-        console.log(paymentRes);
+        console.log('hello', paymentRes);
+
         dispatch({ type: 'PAY_SUCCESS', payload: paymentRes });
         enqueueSnackbar('Payment Successful', { variant: 'success' });
       };
@@ -131,7 +132,7 @@ const OrderPage = ({ params }) => {
             currency: 'ZAR',
             coupon: '',
             items: [
-              order.orderItems.map((item) => {
+              order.orderItems?.map((item) => {
                 return {
                   item_name: item.name,
                   item_id: item._id,
