@@ -82,7 +82,7 @@ const OrderPage = ({ params }) => {
   ] = useReducer(reducer, { loading: true, order: {}, error: '' });
 
   useEffect(() => {
-    if (router.query.payment === 'success' && !order.isPaid) {
+    if (router.query.payment === 'success' && order.isPaid === false) {
       console.log('commence paying');
       const paymentResponse = async () => {
         const token = localStorage.getItem('intelliToken');
@@ -111,27 +111,7 @@ const OrderPage = ({ params }) => {
       };
       paymentResponse();
     }
-    
-    
-    
-    window.dataLayer = [];
-    window.dataLayer.push({ ecommerce: null });
-    window.dataLayer.push({
-  event: "purchase",
-  ecommerce: {
-      transaction_id: orderId,
-      affiliation: "Cape Gadgets",
-      value: order.itemsPrice,
-      tax: 0,
-      shipping: order.shippingPrice,
-      currency: "ZAR",
-      coupon: "",
-      items: order.orderItems
-  }
-});
 
-    
-    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -148,6 +128,36 @@ const OrderPage = ({ params }) => {
     paidAt,
     _id,
   } = order;
+
+  useEffect(() => {
+    window.dataLayer.push({ ecommerce: null }); // Clear the previous ecommerce object.
+    window.dataLayer.push({
+      event: 'purchase',
+      ecommerce: {
+        transaction_id: _id,
+        affiliation: 'Cape Gadgets',
+        value: itemsPrice,
+        tax: 0,
+        shipping: shippingPrice,
+        currency: 'ZAR',
+        coupon: '',
+        items: [
+          orderItems.map((item) => {
+            return {
+              item_name: item.name,
+              item_id: item._id,
+              price: item.price,
+              item_brand: item.brand,
+              item_category: item.category,
+              item_variant: item.brand,
+              quantity: item.quantity,
+            };
+          }),
+        ],
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPaid]);
 
   useEffect(() => {
     if (!userInfo) {
