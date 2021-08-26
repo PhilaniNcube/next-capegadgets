@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import Script from 'next/script';
 import Image from 'next/image';
 import Head from 'next/head';
 import NextLink from 'next/link';
@@ -169,6 +170,26 @@ const ProductPage = (props) => {
             content={`${product.description}`}
           />
           <meta property="twitter:image" content={product.image}></meta>
+          <Script type="application/ld+json">
+            {JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Product',
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: product.rating,
+                reviewCount: product.numReviews,
+              },
+              description: product.description,
+              name: product.name,
+              image: product.image,
+              offers: {
+                '@type': 'Offer',
+                availability: 'https://schema.org/InStock',
+                price: product.price,
+                priceCurrency: 'ZAR',
+              },
+            })}
+          </Script>
         </Head>
 
         <NextLink href="/" passHref>
