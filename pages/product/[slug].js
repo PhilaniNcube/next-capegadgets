@@ -166,7 +166,7 @@ const ProductPage = (props) => {
                 },
                 aggregateRating: {
                   '@type': 'AggregateRating',
-                  ratingCount: `${product.numReviews}`,
+                  ratingCount: `${product.numReviews + 1}`,
                   ratingValue: `${product.rating}`,
                   bestRating: '5',
                   worstRating: '0',
