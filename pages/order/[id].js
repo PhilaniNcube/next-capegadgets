@@ -84,7 +84,7 @@ const OrderPage = ({ params }) => {
   console.log(order);
 
   useEffect(() => {
-    if (router.query.payment === 'success' && order.isPaid === false) {
+    if (router.query.payment === 'success' && !order.isPaid) {
       console.log('commence paying');
       const paymentResponse = async () => {
         const token = localStorage.getItem('intelliToken');
