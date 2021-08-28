@@ -108,13 +108,11 @@ export default function Home(props) {
 
 export async function getStaticProps() {
   await db.connect();
-  const topRatedProducts = await Product.find({}, '-reviews')
+  const topRatedProducts = await Product.find({ featured: true }, '-reviews')
     .lean()
-    .sort({ rating: -1 })
-    .limit(6);
+    .sort({ rating: -1 });
   const featuredProducts = await Product.find({ featured: true }, '-reviews')
-    .lean()
-    .limit(3);
+    .lean();
   await db.disconnect();
 
   return {
