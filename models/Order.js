@@ -11,6 +11,8 @@ const orderSchema = new mongoose.Schema(
         price: { type: Number },
         category: { type: String },
         brand: { type: String },
+        slug: { type: String },
+        sku: { type: String },
       },
     ],
     shippingAddress: {

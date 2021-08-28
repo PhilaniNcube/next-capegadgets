@@ -45,7 +45,8 @@ const PlaceOrderPage = () => {
     cartItems.reduce((a, c) => a + c.price * c.quantity, 0),
   );
 
-  const shippingPrice = itemsPrice > 6000 ? 120 : 140;
+  const shippingPrice =
+    cartItems.length === 1 && cartItems[0].category === 'Ebooks' ? 0 : 140;
 
   const totalPrice = round2(itemsPrice + shippingPrice);
 
@@ -163,7 +164,7 @@ const PlaceOrderPage = () => {
                               </NextLink>
                             </TableCell>
                             <TableCell>
-                              <NextLink href={`/product/${item.name}`} passHref>
+                              <NextLink href={`/product/${item.slug}`} passHref>
                                 <Link>
                                   <Typography color="secondary">
                                     {item.name}

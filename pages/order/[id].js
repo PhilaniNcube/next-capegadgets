@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import NextLink from 'next/link';
+
 import Layout from '../../components/Layout';
 import * as CryptoJS from 'crypto-js';
 import {
@@ -9,7 +9,6 @@ import {
   Card,
   CircularProgress,
   Grid,
-  Link,
   List,
   ListItem,
   Table,
@@ -169,6 +168,8 @@ const OrderPage = ({ params }) => {
     paidAt,
     _id,
   } = order;
+
+  console.log(orderItems);
 
   console.log(window.dataLayer);
 
@@ -419,11 +420,11 @@ const OrderPage = ({ params }) => {
                   </Typography>
                 </ListItem>
                 <ListItem>
-                  {shippingAddress.firstName}
-                  {shippingAddress.lastName}, {shippingAddress.address},
-                  {shippingAddress.city}, {shippingAddress.province},
-                  {shippingAddress.country}, {shippingAddress.postalCode},
-                  {shippingAddress.university}, {shippingAddress.mobileNumber}
+                  {shippingAddress.firstName} {shippingAddress.lastName},{' '}
+                  {shippingAddress.address},{shippingAddress.city},{' '}
+                  {shippingAddress.province},{shippingAddress.country},{' '}
+                  {shippingAddress.postalCode}, {shippingAddress.university},{' '}
+                  {shippingAddress.mobileNumber}, {userInfo.email}
                 </ListItem>
                 <ListItem>
                   Status:{' '}
@@ -460,41 +461,35 @@ const OrderPage = ({ params }) => {
                         <TableRow>
                           <TableCell>Image</TableCell>
                           <TableCell>Name</TableCell>
+                          <TableCell>SKU</TableCell>
                           <TableCell align="right">Quantity</TableCell>
                           <TableCell align="right">Price</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {orderItems.map((item) => {
+                          console.log(item);
                           return (
                             <TableRow key={item._id}>
                               <TableCell>
-                                <NextLink
-                                  href={`/product/${item.slug}`}
-                                  passHref
-                                >
-                                  <Link>
-                                    <Image
-                                      src={item.image}
-                                      alt={item.name}
-                                      width={50}
-                                      height={50}
-                                    />
-                                  </Link>
-                                </NextLink>
+                                <Image
+                                  src={item.image}
+                                  alt={item.name}
+                                  width={50}
+                                  height={50}
+                                />
                               </TableCell>
                               <TableCell>
-                                <NextLink
-                                  href={`/product/${item.slug}`}
-                                  passHref
-                                >
-                                  <Link>
-                                    <Typography color="secondary">
-                                      {' '}
-                                      {item.name}{' '}
-                                    </Typography>
-                                  </Link>
-                                </NextLink>
+                                <Typography color="secondary">
+                                  {' '}
+                                  {item.name}{' '}
+                                </Typography>
+                              </TableCell>
+                              <TableCell>
+                                <Typography color="secondary">
+                                  
+                                  {item.sku ? item.sku : item._id.substring(0,4)}
+                                </Typography>
                               </TableCell>
                               <TableCell align="right">
                                 <Typography>{item.quantity}</Typography>
