@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer, useState } from 'react';
+import React, { Fragment, useContext, useEffect, useReducer, useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 
@@ -439,11 +439,46 @@ const OrderPage = ({ params }) => {
                     {' '}
                     Payment Method{' '}
                   </Typography>
+
                 </ListItem>
+
+
                 <ListItem>{paymentMethod}</ListItem>
                 <ListItem>
                   Status: {isPaid ? `Paid on ${paidAt} ` : 'Not Yet Paid'}
                 </ListItem>
+
+                  {!isPaid && paymentMethod === 'Fundi/EduLoan' && (
+               <Fragment>
+                  <ListItem>
+                  Fundi/EduLoan Payments have to be completed offline on your cellphone. You will need to have airtime to complete the payment. Please follow the instructions below. If you have any questions WhatsApp us on 073 206 2822/067 719 6493. 
+                  </ListItem>
+                  <ListItem>
+                  Step 1: On your cell phone enter the following *120*3385#
+                  </ListItem>
+                  <ListItem>
+                  Step 2: Select Option 1 and PRESS SEND
+                  </ListItem>
+                  <ListItem>
+                  Step 3: Once you have done so you will be asked to enter a merchant code 9017903 and PRESS SEND
+                  </ListItem>
+                  <ListItem>
+                  Step 4: After that you will be asked to enter your Fundi/EduLoan Card Number and then PRESS SEND
+                  </ListItem>
+                  <ListItem>
+                  Step 5: After that you will be asked to enter your CARD PIN and then PRESS SEND
+                  </ListItem>
+                  <ListItem>
+                  Step 6: After that please enter the total amount for your order including the shipping amount R{totalPrice} and then PRESS SEND
+                  </ListItem>
+                  <ListItem>
+                  Step 7: To confirm the transaction if all the details correct enter 1 as the response and then PRESS SEND
+                  </ListItem>
+                  <ListItem>
+                  Step 8: We will then receive an SMS to with a reference number to confirm your order. We will then contact you via Email and or WhatsApp to complete your order and arrange for delivery
+                  </ListItem>
+                </Fragment>
+                )}
               </List>
             </Card>
             <Card className={classes.section}>
@@ -576,6 +611,9 @@ const OrderPage = ({ params }) => {
                     </form>
                   </ListItem>
                 )}
+
+                    
+
                 {!isPaid && paymentMethod === 'Card' && (
                   <ListItem>
                     <form onSubmit={handleCardSubmit}>

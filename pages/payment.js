@@ -72,6 +72,11 @@ const PaymentPage = () => {
                   value="Intellimali"
                   control={<Radio />}
                 ></FormControlLabel>
+                <FormControlLabel
+                  label="Fundi/EduLoan"
+                  value="Fundi/EduLoan"
+                  control={<Radio />}
+                ></FormControlLabel>
               </RadioGroup>
             </FormControl>
           </ListItem>

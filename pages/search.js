@@ -22,7 +22,7 @@ import Rating from '@material-ui/lab/Rating';
 import { Pagination } from '@material-ui/lab';
 import SearchForm from '../components/SearchForm';
 
-const PAGE_SIZE = 18;
+const PAGE_SIZE = 30;
 
 const prices = [
   {
