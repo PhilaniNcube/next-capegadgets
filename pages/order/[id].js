@@ -1,4 +1,10 @@
-import React, { Fragment, useContext, useEffect, useReducer, useState } from 'react';
+import React, {
+  Fragment,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 
@@ -127,19 +133,17 @@ const OrderPage = ({ params }) => {
               shipping: data.shippingPrice,
               currency: 'ZAR',
               coupon: '',
-              items: [
-                data.orderItems?.map((item) => {
-                  return {
-                    item_name: item.name,
-                    item_id: item._id,
-                    price: item.price,
-                    item_brand: item.brand,
-                    item_category: item.category,
-                    item_variant: '',
-                    quantity: item.quantity,
-                  };
-                }),
-              ],
+              items: data.orderItems?.map((item) => {
+                return {
+                  item_name: item.name,
+                  item_id: item._id,
+                  price: item.price,
+                  item_brand: item.brand,
+                  item_category: item.category,
+                  item_variant: '',
+                  quantity: item.quantity,
+                };
+              }),
             },
           });
         }
@@ -439,45 +443,54 @@ const OrderPage = ({ params }) => {
                     {' '}
                     Payment Method{' '}
                   </Typography>
-
                 </ListItem>
-
 
                 <ListItem>{paymentMethod}</ListItem>
                 <ListItem>
                   Status: {isPaid ? `Paid on ${paidAt} ` : 'Not Yet Paid'}
                 </ListItem>
 
-                  {!isPaid && paymentMethod === 'Fundi/EduLoan' && (
-               <Fragment>
-                  <ListItem>
-                  Fundi/EduLoan Payments have to be completed offline on your cellphone. You will need to have airtime to complete the payment. Please follow the instructions below. If you have any questions WhatsApp us on 073 206 2822/067 719 6493. 
-                  </ListItem>
-                  <ListItem>
-                  Step 1: On your cell phone enter the following *120*3385#
-                  </ListItem>
-                  <ListItem>
-                  Step 2: Select Option 1 and PRESS SEND
-                  </ListItem>
-                  <ListItem>
-                  Step 3: Once you have done so you will be asked to enter a merchant code 9017903 and PRESS SEND
-                  </ListItem>
-                  <ListItem>
-                  Step 4: After that you will be asked to enter your Fundi/EduLoan Card Number and then PRESS SEND
-                  </ListItem>
-                  <ListItem>
-                  Step 5: After that you will be asked to enter your CARD PIN and then PRESS SEND
-                  </ListItem>
-                  <ListItem>
-                  Step 6: After that please enter the total amount for your order including the shipping amount R{totalPrice} and then PRESS SEND
-                  </ListItem>
-                  <ListItem>
-                  Step 7: To confirm the transaction if all the details correct enter 1 as the response and then PRESS SEND
-                  </ListItem>
-                  <ListItem>
-                  Step 8: We will then receive an SMS to with a reference number to confirm your order. We will then contact you via Email and or WhatsApp to complete your order and arrange for delivery
-                  </ListItem>
-                </Fragment>
+                {!isPaid && paymentMethod === 'Fundi/EduLoan' && (
+                  <Fragment>
+                    <ListItem>
+                      Fundi/EduLoan Payments have to be completed offline on
+                      your cellphone. You will need to have airtime to complete
+                      the payment. Please follow the instructions below. If you
+                      have any questions WhatsApp us on 073 206 2822/067 719
+                      6493.
+                    </ListItem>
+                    <ListItem>
+                      Step 1: On your cell phone enter the following *120*3385#
+                    </ListItem>
+                    <ListItem>Step 2: Select Option 1 and PRESS SEND</ListItem>
+                    <ListItem>
+                      Step 3: Once you have done so you will be asked to enter a
+                      merchant code 9017903 and PRESS SEND
+                    </ListItem>
+                    <ListItem>
+                      Step 4: After that you will be asked to enter your
+                      Fundi/EduLoan Card Number and then PRESS SEND
+                    </ListItem>
+                    <ListItem>
+                      Step 5: After that you will be asked to enter your CARD
+                      PIN and then PRESS SEND
+                    </ListItem>
+                    <ListItem>
+                      Step 6: After that please enter the total amount for your
+                      order including the shipping amount R{totalPrice} and then
+                      PRESS SEND
+                    </ListItem>
+                    <ListItem>
+                      Step 7: To confirm the transaction if all the details
+                      correct enter 1 as the response and then PRESS SEND
+                    </ListItem>
+                    <ListItem>
+                      Step 8: We will then receive an SMS to with a reference
+                      number to confirm your order. We will then contact you via
+                      Email and or WhatsApp to complete your order and arrange
+                      for delivery
+                    </ListItem>
+                  </Fragment>
                 )}
               </List>
             </Card>
@@ -522,8 +535,9 @@ const OrderPage = ({ params }) => {
                               </TableCell>
                               <TableCell>
                                 <Typography color="secondary">
-                                  
-                                  {item.sku ? item.sku : item._id.substring(0,4)}
+                                  {item.sku
+                                    ? item.sku
+                                    : item._id.substring(0, 4)}
                                 </Typography>
                               </TableCell>
                               <TableCell align="right">
@@ -611,8 +625,6 @@ const OrderPage = ({ params }) => {
                     </form>
                   </ListItem>
                 )}
-
-                    
 
                 {!isPaid && paymentMethod === 'Card' && (
                   <ListItem>
