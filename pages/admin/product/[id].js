@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import NextLink from 'next/link';
 import { Store } from '../../../utils/Store';
 import { Controller, useForm } from 'react-hook-form';
@@ -14,7 +14,7 @@ import {
   ListItem,
   ListItemText,
   TextField,
-  Typography,  
+  Typography,
   MenuItem,
   Select,
 } from '@material-ui/core';
@@ -130,8 +130,6 @@ const ProductEdit = ({ params }) => {
     }
   };
 
-   const [featured, setFeatured] = useState(false);
-
   const submitHandler = async ({
     name,
     slug,
@@ -142,7 +140,7 @@ const ProductEdit = ({ params }) => {
     countInStock,
     description,
     sku,
-    featured
+    featured,
   }) => {
     closeSnackbar();
 
@@ -160,7 +158,7 @@ const ProductEdit = ({ params }) => {
           countInStock,
           description,
           sku,
-          featured
+          featured,
         },
         {
           headers: {
@@ -449,34 +447,30 @@ const ProductEdit = ({ params }) => {
                         )}
                       ></Controller>
                     </ListItem>
-                   <ListItem>
-            <Controller
-              name="featured"
-              control={control}
-              defaultValue=""
-              rules={{
-                required: true,
-              }}
-              render={({ field }) => (
-                <Select
-                  variant="outlined"
-                  fullWidth
-                  id="featured"
-                  label="Featured"
-                  defaultValue="Not Featured"
-                  error={Boolean(errors.featured)}
-                  {...field}
-                >
-                 <MenuItem value="false">
-                        Not Featured
-                      </MenuItem>
-                 <MenuItem value="true">
-                      Featured
-                      </MenuItem>
-                </Select>
-              )}
-            ></Controller>
-          </ListItem>
+                    <ListItem>
+                      <Controller
+                        name="featured"
+                        control={control}
+                        defaultValue=""
+                        rules={{
+                          required: true,
+                        }}
+                        render={({ field }) => (
+                          <Select
+                            variant="outlined"
+                            fullWidth
+                            id="featured"
+                            label="Featured"
+                            defaultValue="Not Featured"
+                            error={Boolean(errors.featured)}
+                            {...field}
+                          >
+                            <MenuItem value="false">Not Featured</MenuItem>
+                            <MenuItem value="true">Featured</MenuItem>
+                          </Select>
+                        )}
+                      ></Controller>
+                    </ListItem>
 
                     <ListItem>
                       <Button
