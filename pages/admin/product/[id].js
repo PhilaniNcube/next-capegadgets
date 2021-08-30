@@ -462,7 +462,7 @@ const ProductEdit = ({ params }) => {
                             fullWidth
                             id="featured"
                             label="Featured"
-                            defaultValue={false}
+                            defaultValue=""
                             error={Boolean(errors.featured)}
                             {...field}
                           >
