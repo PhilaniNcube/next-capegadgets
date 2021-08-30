@@ -458,7 +458,7 @@ const ProductEdit = ({ params }) => {
                             fullWidth
                             id="featured"
                             label="featured"
-                            checked={featured}
+                            checked="featured"
                             onChange={(e) => !e.target.checked}
                             defaultValue="Not Featured"
                             error={Boolean(errors.featured)}
