@@ -461,12 +461,12 @@ const ProductEdit = ({ params }) => {
                             fullWidth
                             id="featured"
                             label="Featured"
-                            defaultValue="Not Featured"
+                            defaultValue={false}
                             error={Boolean(errors.featured)}
                             {...field}
                           >
-                            <MenuItem value="false">Not Featured</MenuItem>
-                            <MenuItem value="true">Featured</MenuItem>
+                            <MenuItem value={false}>Not Featured</MenuItem>
+                            <MenuItem value={true}>Featured</MenuItem>
                           </Select>
                         )}
                       ></Controller>
