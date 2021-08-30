@@ -451,16 +451,16 @@ const ProductEdit = ({ params }) => {
                       <Controller
                         name="featured"
                         control={control}
-                        defaultValue={false}
+                        defaultValue=""
                         render={({ field }) => (
                           <Checkbox
                             variant="outlined"
                             fullWidth
                             id="featured"
                             label="featured"
-                            checked="featured"
-                            onChange={(e) => !e.target.checked}
-                            defaultValue="Not Featured"
+                            checked={field.value}
+                            onChange={(e) => field.onChange(e.target.checked)}
+                            defaultChecked={false}
                             error={Boolean(errors.featured)}
                             {...field}
                           />
