@@ -15,8 +15,7 @@ import {
   ListItemText,
   TextField,
   Typography,
-  MenuItem,
-  Select,
+  Checkbox
 } from '@material-ui/core';
 import useStyles from '../../../utils/styles';
 import { getError } from '../../../utils/error';
@@ -454,18 +453,19 @@ const ProductEdit = ({ params }) => {
                         control={control}
                         defaultValue={false}
                         render={({ field }) => (
-                          <Select
+                          <Checkbox
                             variant="outlined"
                             fullWidth
                             id="featured"
                             label="featured"
+                            checked={featured}
+                            onChange={(e) => !e.target.checked}
                             defaultValue="Not Featured"
                             error={Boolean(errors.featured)}
                             {...field}
-                          >
-                            <MenuItem value={false}>Not Featured</MenuItem>
-                            <MenuItem value={true}>Featured</MenuItem>
-                          </Select>
+                          />
+                            
+                          
                         )}
                       ></Controller>
                     </ListItem>
