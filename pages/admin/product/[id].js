@@ -50,6 +50,7 @@ function reducer(state, action) {
 }
 
 const ProductEdit = ({ params }) => {
+  
   const productId = params.id;
   const { state } = useContext(Store);
   const [
