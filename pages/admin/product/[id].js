@@ -452,17 +452,14 @@ const ProductEdit = ({ params }) => {
                       <Controller
                         name="featured"
                         control={control}
-                        defaultValue=""
-                        rules={{
-                          required: true,
-                        }}
+                        defaultValue={false}
                         render={({ field }) => (
                           <Select
                             variant="outlined"
                             fullWidth
                             id="featured"
-                            label="Featured"
-                            defaultValue=""
+                            label="featured"
+                            defaultValue="Not Featured"
                             error={Boolean(errors.featured)}
                             {...field}
                           >
