@@ -86,8 +86,6 @@ const OrderPage = ({ params }) => {
     dispatch,
   ] = useReducer(reducer, { loading: true, order: {}, error: '' });
 
-  console.log(order);
-
   useEffect(() => {
     if (router.query.payment === 'success' && !order.isPaid) {
       console.log('commence paying');
