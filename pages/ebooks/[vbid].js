@@ -102,6 +102,8 @@ const ProductPage = (props) => {
       name: `${ebook.title}`,
       image: `${ebook.resource_links.cover_image}`,
       description: `${ebook.title}`,
+      format: `ebook`,
+      isbn: `${ebook.sku},
       brand: {
         '@type': 'Brand',
         name: `${ebook.imprint_name}`,
