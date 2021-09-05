@@ -91,6 +91,33 @@ const ProductPage = (props) => {
     <Layout title={ebook.title}>
       <div className={classes.section}>
         <Head>
+        <script
+  type="application/ld+json"
+  strategy="beforeInteractive"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      '@context': 'http://schema.org',
+      '@type': 'Product',
+      sku: `${ebook.vbid}`,
+      name: `${ebook.title}`,
+      image: `${ebook.resource_links.cover_image}`,
+      description: `${ebook.title}`,
+      format: `ebook`,
+      isbn: `${ebook.sku}`,
+      brand: {
+        '@type': 'Brand',
+        name: `${ebook.imprint_name}`,
+      },
+      offers: {
+        '@type': 'Offer',
+        itemCondition: 'https://schema.org/NewCondition',
+        availability: 'https://schema.org/InStock',
+        priceCurrency: `ZAR`,
+        price: `${ebook.publisher_list_price * 18}`,
+      },
+    }),
+  }}
+/>;
           <title>{ebook.title} | Cape Gadgets</title>
           <meta
             name="Description"

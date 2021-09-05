@@ -46,7 +46,7 @@ const PlaceOrderPage = () => {
   );
 
   const shippingPrice =
-    cartItems.length === 1 && cartItems[0].category === 'Ebooks' ? 0 : 140;
+    cartItems.length === 1 && cartItems[0].category === 'ebook' ? 0 : 140;
 
   const totalPrice = round2(itemsPrice + shippingPrice);
 
