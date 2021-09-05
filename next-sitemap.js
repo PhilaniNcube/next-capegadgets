@@ -1,4 +1,4 @@
-const siteUrl = 'https://capegadgets.vercel.app';
+const siteUrl = 'https://capegadgets.co.za';
 
 module.exports = {
   siteUrl,
