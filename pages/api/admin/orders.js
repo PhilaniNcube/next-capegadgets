@@ -12,7 +12,8 @@ handler.use(isAuth, isAdmin);
 handler.get(async (req, res) => {
   await db.connect();
   const orders = await Order.find({})
-    .sort({ paidAt: -1 })
+    .sort({ paidAt: -1, createdAt:-1
+ })
     .populate('User', 'firstName');
   await db.disconnect();
   res.send(orders);
