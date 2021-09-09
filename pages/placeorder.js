@@ -93,7 +93,7 @@ const PlaceOrderPage = () => {
     ecommerce: {
       items: cartItems.map((item) => {
       return (
-       item_name: item.name, // Name or ID is required.
+        item_name: item.name,
         item_id: item._id,
         price: item.price,
         item_brand: item.brand,
