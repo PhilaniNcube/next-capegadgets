@@ -92,14 +92,14 @@ const PlaceOrderPage = () => {
     event: "begin_checkout",
     ecommerce: {
       items: cartItems.map((item) => {
-      return (
+      return ({
         item_name: item.name,
         item_id: item._id,
         price: item.price,
         item_brand: item.brand,
         item_category: item.category,
         quantity: item.quantity
-      )
+      })
       })
     }
   });
