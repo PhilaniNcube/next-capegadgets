@@ -1,4 +1,4 @@
-import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+
 import { SnackbarProvider } from 'notistack';
 import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
@@ -19,9 +19,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <SnackbarProvider anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
       <StoreProvider>
-        <PayPalScriptProvider deferLoading={true}>
+      
           <Component {...pageProps} />
-        </PayPalScriptProvider>
+       
       </StoreProvider>
     </SnackbarProvider>
   );
