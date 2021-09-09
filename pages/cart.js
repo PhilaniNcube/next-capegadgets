@@ -47,6 +47,27 @@ const CartPage = () => {
   };
 
   const checkoutHandler = () => {
+    
+         console.log("begin checkout")
+    window.dataLayer.push({ ecommerce: null });  // Clear the previous ecommerce object.
+    window.dataLayer.push({
+    event: "begin_checkout",
+    ecommerce: {
+      items: cartItems.map((item) => {
+      return ({
+        item_name: item.name,
+        item_id: item._id,
+        price: item.price,
+        item_brand: item.brand,
+        item_category: item.category,
+        quantity: item.quantity
+      })
+      })
+    }
+  });
+    
+    console.log("check dataLayer")
+    
     router.push('/shipping');
   };
 
