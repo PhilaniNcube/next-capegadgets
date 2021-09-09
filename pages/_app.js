@@ -1,13 +1,16 @@
 import { SnackbarProvider } from 'notistack';
 import { useEffect } from 'react';
 import TagManager from 'react-gtm-module';
-import FacebookPixel from '../components/FacebookPixel';
 import '../styles/globals.css';
 import { StoreProvider } from '../utils/Store';
 
+const tagManagerArgs = {
+  gtmId: 'GTM-K3HRQQV',
+};
+
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    TagManager.initialize({ gtmId: 'GTM-K3HRQQV' });
+    TagManager.initialize(tagManagerArgs);
   }, []);
 
   useEffect(() => {
@@ -19,9 +22,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <SnackbarProvider anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
       <StoreProvider>
-        <FacebookPixel>
-          <Component {...pageProps} />
-        </FacebookPixel>
+        <Component {...pageProps} />
       </StoreProvider>
     </SnackbarProvider>
   );
