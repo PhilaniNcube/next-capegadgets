@@ -10,8 +10,6 @@ const SearchForm = () => {
   const router = useRouter();
   const [query, setQuery] = useState('');
 
-  console.log(router.pathname);
-
   const queryChangeHandler = (e) => {
     setQuery(e.target.value);
   };

@@ -91,9 +91,9 @@ export default function Home(props) {
       <SearchForm />
       <Typography variant="h2">Popular Products</Typography>
       <Grid container spacing={3}>
-        {topRatedProducts.map((product) => {
+        {topRatedProducts.map((product, index) => {
           return (
-            <Grid item md={4} key={product.name}>
+            <Grid item md={4} key={index}>
               <ProductItem
                 addToCartHandler={addToCartHandler}
                 product={product}
@@ -111,8 +111,10 @@ export async function getStaticProps() {
   const topRatedProducts = await Product.find({ featured: true }, '-reviews')
     .lean()
     .sort({ rating: -1 });
-  const featuredProducts = await Product.find({ featured: true }, '-reviews')
-    .lean();
+  const featuredProducts = await Product.find(
+    { featured: true },
+    '-reviews',
+  ).lean();
   await db.disconnect();
 
   return {
