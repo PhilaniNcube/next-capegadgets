@@ -35,7 +35,6 @@ const ProductPage = (props) => {
   const { userInfo } = state;
 
   const { product } = props;
-  console.log(product);
 
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
@@ -49,7 +48,6 @@ const ProductPage = (props) => {
     try {
       const { data } = await axios.get(`/api/products/${product._id}/reviews`);
       setReviews(data);
-      console.log(data);
     } catch (error) {
       enqueueSnackbar(getError(error), { variant: 'error' });
     }
@@ -57,7 +55,7 @@ const ProductPage = (props) => {
 
   useEffect(() => {
     fetchReviews();
-    console.log(window);
+
     window.dataLayer = [];
     window.dataLayer.push({ ecommerce: null });
     window.dataLayer.push({
