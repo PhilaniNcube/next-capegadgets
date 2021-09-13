@@ -22,8 +22,8 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
   return (
-    <>
-    <Script src={`https://www.googletagmanager.com/gtm.js?id=GTM-K3HRQQV`} />
+ 
+   
     <SnackbarProvider anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
       <StoreProvider>
         <FacebookPixel>
@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }) {
         </FacebookPixel>
       </StoreProvider>
     </SnackbarProvider>
-</>
+
   );
 }
 
