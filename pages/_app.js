@@ -5,9 +5,11 @@ import FacebookPixel from '../components/FacebookPixel';
 import '../styles/globals.css';
 import { StoreProvider } from '../utils/Store';
 import { GTMPageView } from '../utils/gtm';
-import Router from 'next/router';
+import {useRouter} from 'next/router';
 
 function MyApp({ Component, pageProps }) {
+   const Router = useRouter();
+   
    useEffect(() => {
     Router.events.on('routeChangeComplete', GTMPageView)
     return () => {
