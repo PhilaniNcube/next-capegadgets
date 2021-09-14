@@ -9,9 +9,9 @@ import Router from 'next/router';
 
 function MyApp({ Component, pageProps }) {
    useEffect(() => {
-    router.events.on('routeChangeComplete', GTMPageview)
+    Router.events.on('routeChangeComplete', GTMPageView)
     return () => {
-      Router.events.off('routeChangeComplete', GTMPageview)
+      Router.events.off('routeChangeComplete', GTMPageView)
     }
   }, [Router.events])
 
