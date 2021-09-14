@@ -132,19 +132,14 @@ export default function Layout({ title, description, children }) {
   return (
     <div>
       <Head>
-         <script dangerouslySetInnerHTML={{ __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-K3HRQQV');`}}></script>
+       
         <title>{title ? `${title} - Cape Gadgets` : 'Cape Gadgets'}</title>
         {description && <meta name="description" content={description}></meta>}
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         
-         <noscript dangerouslySetInnerHTML={{ __html: `<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K3HRQQV"
-            height="0" width="0" style="display:none;visibility:hidden"></iframe>`}}></noscript>
+        
         <AppBar position="static" className={classes.navbar}>
           <Toolbar className={classes.toolbar} display="flex">
             <Box display="flex" alignItems="center">
