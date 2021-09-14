@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { ServerStyleSheets } from '@material-ui/core';
-import Script from 'next/script';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import { FB_PIXEL_ID } from '../utils/fpixel';
 
