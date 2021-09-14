@@ -1,6 +1,5 @@
 import { SnackbarProvider } from 'notistack';
 import { useEffect } from 'react';
-import Script from 'next/script'
 import FacebookPixel from '../components/FacebookPixel';
 import '../styles/globals.css';
 import { StoreProvider } from '../utils/Store';
