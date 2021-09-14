@@ -36,7 +36,7 @@ export default class MyDocument extends Document {
           />
         </Head>
         <body>
-        <NextScript />
+       
         
        <noscript>
             <iframe
@@ -57,7 +57,7 @@ export default class MyDocument extends Document {
             />
           </noscript>
           <Main />
-          
+           <NextScript />
         </body>
       </Html>
     );
