@@ -4,6 +4,8 @@ import { ServerStyleSheets } from '@material-ui/core';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import { FB_PIXEL_ID } from '../utils/fpixel';
 
+const GTM_ID = 'GTM-K3HRQQV'
+
 export default class MyDocument extends Document {
   render() {
     return (
@@ -34,7 +36,14 @@ export default class MyDocument extends Document {
         <body>
         <NextScript />
         
-       
+       <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: 'none', visibility: 'hidden' }}
+            />
+          </noscript>
           
           <noscript>
             <img
