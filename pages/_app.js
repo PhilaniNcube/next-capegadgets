@@ -5,7 +5,7 @@ import FacebookPixel from '../components/FacebookPixel';
 import '../styles/globals.css';
 import { StoreProvider } from '../utils/Store';
 import { GTMPageView } from '../utils/gtm';
-import {useRouter} from 'next/router';
+import {useRouter} from 'next/router'
 
 function MyApp({ Component, pageProps }) {
    const Router = useRouter();
@@ -25,18 +25,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
   return (
  <>
-     <Script
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer', 'GTM-K3HRQQV');
-          `,
-        }}
-      />
+     
     <SnackbarProvider anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
       <StoreProvider>
         <FacebookPixel>
