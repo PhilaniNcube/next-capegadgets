@@ -42,12 +42,7 @@ function MyApp({ Component, pageProps }) {
         }}
       />
 
-        <Script
-        strategy="afterInteractive"
-        async  
-        type="text/javascript" 
-        src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TU5Gj8"
-        />
+       
         <FacebookPixel>
           <Component {...pageProps} />
         </FacebookPixel>
