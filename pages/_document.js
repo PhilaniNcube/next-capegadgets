@@ -13,13 +13,7 @@ export default class MyDocument extends Document {
         <Head>
      
       
-      <script 
-      dangerouslySetInnerHTML={{
-      __html: `
-      async type="text/javascript" src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TU5Gj8"
-      `
-      }}
-      ></script>
+    
          
           <script
             dangerouslySetInnerHTML={{
@@ -65,6 +59,14 @@ export default class MyDocument extends Document {
           </noscript>
           <Main />
            <NextScript />
+           
+             <script 
+      dangerouslySetInnerHTML={{
+      __html: `
+      async type="text/javascript" src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=TU5Gj8"
+      `
+      }}
+      ></script>
         </body>
       </Html>
     );
