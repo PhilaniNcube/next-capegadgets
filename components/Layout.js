@@ -36,11 +36,20 @@ import { getError } from '../utils/error';
 import axios from 'axios';
 import { AccountCircle } from '@material-ui/icons';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import { GTMPageView } from '../utils/gtm';
 
 export default function Layout({ title, description, children }) {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const { darkMode, cart, userInfo } = state;
+  
+  
+    useEffect(() => {
+    router.events.on('routeChangeComplete', GTMPageView)
+    return () => {
+      router.events.off('routeChangeComplete', GTMPageView)
+    }
+  }, [router.events])
 
   const theme = createTheme({
     typography: {
