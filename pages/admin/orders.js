@@ -171,12 +171,19 @@ function OrdersDashboard() {
                               )}
                             </TableCell>
                             <TableCell>
-                              {order.isShipped
-                                ? `Order shipped on ${order.shippedAt.substring(
-                                    0,
-                                    10,
-                                  )}`
-                                : 'Not shipped'}
+                              {order.isShipped ? (
+                                <Chip
+                                  label="Shipped"
+                                  color="success"
+                                  style={{
+                                    backgroundColor: 'green',
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                  }}
+                                />
+                              ) : (
+                                'Not shipped'
+                              )}
                             </TableCell>
                             <TableCell>
                               <NextLink href={`/order/${order._id}`} passHref>
