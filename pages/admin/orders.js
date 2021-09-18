@@ -10,6 +10,7 @@ import {
   ListItem,
   Typography,
   Card,
+  Chip,
   Button,
   ListItemText,
   TableContainer,
@@ -127,6 +128,7 @@ function OrdersDashboard() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
+                        {console.log(orders)}
                         {orders.map((order) => (
                           <TableRow key={order._id}>
                             <TableCell>{order._id.substring(20, 24)}</TableCell>
@@ -146,9 +148,27 @@ function OrdersDashboard() {
                             </TableCell>
                             <TableCell>R{order.totalPrice}</TableCell>
                             <TableCell>
-                              {order.isPaid
-                                ? `paid at ${order.paidAt.substring(0, 10)}`
-                                : 'not paid'}
+                              {order.isPaid ? (
+                                <Chip
+                                  label={order.paymentMethod}
+                                  color="success"
+                                  style={{
+                                    backgroundColor: 'green',
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                  }}
+                                />
+                              ) : (
+                                <Chip
+                                  label={order.paymentMethod}
+                                  color="warning"
+                                  style={{
+                                    backgroundColor: 'red',
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                  }}
+                                />
+                              )}
                             </TableCell>
                             <TableCell>
                               {order.isShipped
