@@ -263,6 +263,11 @@ const ProductPage = (props) => {
                 Add To Cart
               </Button>
             </ListItem>
+            <ListItem>
+            <Typography>
+            Cellphones & Laptops will be delivered in the first week of November due to a worldwide shortage.
+            </Typography>
+            </ListItem>
           </List>
         </Grid>
       </Grid>
