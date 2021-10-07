@@ -15,16 +15,27 @@ handler.get(async (req, res) => {
   const usersCount = await User.countDocuments();
   const ordersPriceGroup = await Order.aggregate([
     {
-      $group: {
-        _id: null,
-        sales: { $sum: '$totalPrice' },
-      },
-    },
+    '$match': {
+      'isPaid': true
+    }
+  }, {
+    '$group': {
+      '_id': '$isPaid', 
+      'totalPrice': {
+        '$sum': '$totalPrice'
+      }
+    }
+  },
   ]);
 
   const ordersPrice =
     ordersPriceGroup.length > 0 ? ordersPriceGroup[0].sales : 0;
   const salesData = await Order.aggregate([
+     {
+    '$match': {
+      'isPaid': true
+    }
+  },
     {
       $group: {
         _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
