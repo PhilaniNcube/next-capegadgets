@@ -247,7 +247,7 @@ const ProductPage = (props) => {
             </ListItem>
             <ListItem>
               <Chip
-                label={product.countInStock ? 'In Stock' : 'Unavailable'}
+                label={product.countInStock !== 0 ? 'In Stock' : 'Unavailable'}
                 clickable
                 color="secondary"
                 variant="outlined"
@@ -255,6 +255,7 @@ const ProductPage = (props) => {
             </ListItem>
             <ListItem>
               <Button
+              disabled={product.countInStock === 0}
                 fullWidth
                 variant="contained"
                 color="primary"
