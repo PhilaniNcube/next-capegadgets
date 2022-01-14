@@ -33,6 +33,7 @@ const ProductItem = ({ product, addToCartHandler }) => {
       </CardContent>
       <CardActions>
         <Button
+        disabled={product.countInStock === 0}
           variant="contained"
           fullWidth
           color="primary"
