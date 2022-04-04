@@ -266,7 +266,7 @@ const ProductPage = (props) => {
             </ListItem>
             <ListItem>
             <Typography>
-            Cellphones & Laptops will be delivered in the first week of November due to a worldwide shortage.
+            The other thing can Cape Gadgets state delivery takes 15 business days.
             </Typography>
             </ListItem>
           </List>
